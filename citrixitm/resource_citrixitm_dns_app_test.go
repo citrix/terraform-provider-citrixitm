@@ -3,6 +3,7 @@ package citrixitm
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
@@ -55,10 +56,8 @@ func testSweepDnsApps(region string) error {
 func TestAccDnsApp_basic(t *testing.T) {
 	var app itm.DnsApp
 	randString := acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
-	randInt := acctest.RandInt()
 	appName = fmt.Sprintf("foo-%s", randString)
 	appNameUpdated = fmt.Sprintf("bar-%s", randString)
-	appCname := fmt.Sprintf("foo-%d.cdx.cedexis.net", randInt)
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -76,7 +75,6 @@ func TestAccDnsApp_basic(t *testing.T) {
 							Description:   "some description",
 							AppData:       "// some source",
 							FallbackCname: "fallback.foo.com",
-							AppCname:      appCname,
 						}),
 				),
 			},
@@ -91,7 +89,6 @@ func TestAccDnsApp_basic(t *testing.T) {
 							Description:   "some description",
 							AppData:       "// some source",
 							FallbackCname: "fallback.foo.com",
-							AppCname:      appCname,
 						}),
 				),
 			},
@@ -106,7 +103,6 @@ func TestAccDnsApp_basic(t *testing.T) {
 							Description:   "some description",
 							AppData:       "// some source foo",
 							FallbackCname: "fallback.foo.com",
-							AppCname:      appCname,
 						}),
 				),
 			},
@@ -121,7 +117,6 @@ func TestAccDnsApp_basic(t *testing.T) {
 							Description:   "some description foo",
 							AppData:       "// some source foo",
 							FallbackCname: "fallback.foo.com",
-							AppCname:      appCname,
 						}),
 				),
 			},
@@ -136,7 +131,6 @@ func TestAccDnsApp_basic(t *testing.T) {
 							Description:   "some description foo",
 							AppData:       "// some source foo",
 							FallbackCname: "fallback.bar.com",
-							AppCname:      appCname,
 						}),
 				),
 			},
@@ -149,7 +143,6 @@ type testAccCitrixITMDnsAppExpectedAttributes struct {
 	Description   string
 	AppData       string
 	FallbackCname string
-	AppCname      string
 }
 
 func testAccCheckCitrixITMDnsAppAttributes(got *itm.DnsApp, want *testAccCitrixITMDnsAppExpectedAttributes) resource.TestCheckFunc {
@@ -166,8 +159,10 @@ func testAccCheckCitrixITMDnsAppAttributes(got *itm.DnsApp, want *testAccCitrixI
 		if err = testValues("app data", want.AppData, got.AppData); err != nil {
 			return
 		}
-		if err = testValues("app CNAME", want.AppCname, got.AppCname); err != nil {
-			return
+		// Check the app CNAME
+		isMatch, _ := regexp.MatchString("\\d-\\d{2}-[0-9a-z]{4}-[0-9a-z]{4}\\.cdx\\.cedexis\\.net", got.AppCname)
+		if !isMatch {
+			err = fmt.Errorf("The app CNAME is invalid. Got: %s", got.AppCname)
 		}
 		return
 	}

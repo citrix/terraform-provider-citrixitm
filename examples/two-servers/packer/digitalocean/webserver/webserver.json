@@ -1,0 +1,29 @@
+{
+    "variables": {
+        "digitalocean_api_token": ""
+    },
+    "builders": [
+        {
+            "type": "digitalocean",
+            "api_token": "{{user `digitalocean_api_token`}}",
+            "image": "ubuntu-18-04-x64",
+            "region": "sfo2",
+            "size": "512mb",
+            "ssh_username": "root"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "apt-get update",
+                "DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https ca-certificates curl software-properties-common",
+                "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn apt-key add -",
+                "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic test\"",
+                "apt-get update",
+                "DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce",
+                "docker pull cedexis/terraform-demo-webapp:latest"
+            ]
+        }
+    ]
+}

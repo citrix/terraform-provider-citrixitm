@@ -1,0 +1,10 @@
+[Unit]
+Description=Terraform Demo Webapp
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStart=/usr/bin/docker run --rm --env EXAMPLE_SERVER_NAME=${server_name} -p 80:8080 cedexis/terraform-demo-webapp:latest
+
+[Install]
+WantedBy=multi-user.target

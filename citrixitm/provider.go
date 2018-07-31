@@ -28,8 +28,8 @@ func Provider() terraform.ResourceProvider {
 			},
 			"base_url": {
 				Type:        schema.TypeString,
-				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("ITM_BASE_URL", nil),
+				Optional:    true,
+				Default:     "https://portal.cedexis.com/api",
 				Description: "The base URL for Citrix ITM API requests",
 			},
 		},

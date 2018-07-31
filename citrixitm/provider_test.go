@@ -35,7 +35,4 @@ func testAccPreCheck(t *testing.T) {
 	if v := os.Getenv("ITM_CLIENT_SECRET"); v == "" {
 		t.Fatal("ITM_CLIENT_SECRET must be set for acceptance tests to run properly")
 	}
-	if v := os.Getenv("ITM_BASE_URL"); v == "" {
-		t.Fatal("ITM_BASE_URL must be set for acceptance tests to run properly")
-	}
 }

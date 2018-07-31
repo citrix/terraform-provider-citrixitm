@@ -3,10 +3,14 @@ terraform {
 }
 
 provider "citrixitm" {
-    client_id = "${var.itm_client_id}"
-    client_secrit = "${var.itm_client_secret}"
+    client_id     = "${var.itm_client_id}"
+    client_secret = "${var.itm_client_secret}"
+    base_url      = "${var.itm_base_url}"
 }
 
-resource "citrixitm_dns_app" "my_app" {
-    source = "foo source"
+resource "citrixitm_dns_app" "website" {
+    name             = "Simple Round Robin"
+    description      = "DNS routing for the website"
+    app_data         = "${file("${path.module}/website.dns.js")}"
+    fallback_cname   = "origin.example.com"
 }

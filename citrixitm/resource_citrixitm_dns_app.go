@@ -17,21 +17,25 @@ func resourceCitrixITMDnsApp() *schema.Resource {
 		Delete: withExistingResource(delete),
 
 		Schema: map[string]*schema.Schema{
-			"app_data": &schema.Schema{
+			"app_data": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"fallback_cname": &schema.Schema{
+			"fallback_cname": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+			},
+			"cname": {
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 		},
 	}
@@ -75,6 +79,7 @@ func read(id int, c *itm.Client, d *schema.ResourceData) error {
 	d.Set("description", app.Description)
 	d.Set("fallback_cname", app.FallbackCname)
 	d.Set("app_data", app.AppData)
+	d.Set("cname", app.AppCname)
 	return nil
 }
 

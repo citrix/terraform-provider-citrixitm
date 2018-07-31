@@ -91,6 +91,20 @@ func TestAccDnsApp_basic(t *testing.T) {
 						}),
 				),
 			},
+			{
+				Config: testAccCheckCitrixITMDnsAppConfig_ChangeAppData(randString),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckCitrixITMDnsAppExists("citrixitm_dns_app.foo", &app),
+					testAccCheckCitrixITMDnsAppAttributes(
+						&app,
+						&testAccCitrixITMDnsAppExpectedAttributes{
+							Name:          appNameUpdated,
+							Description:   "some description",
+							AppData:       "// some source foo",
+							FallbackCname: "fallback.foo.com",
+						}),
+				),
+			},
 		},
 	})
 }
@@ -175,6 +189,16 @@ resource "citrixitm_dns_app" "foo" {
   name 				= "bar-%s"
   description		= "some description"
   app_data			= "// some source"
+  fallback_cname	= "fallback.foo.com"
+}`, randString)
+}
+
+func testAccCheckCitrixITMDnsAppConfig_ChangeAppData(randString string) string {
+	return fmt.Sprintf(`
+resource "citrixitm_dns_app" "foo" {
+  name 				= "bar-%s"
+  description		= "some description"
+  app_data			= "// some source foo"
   fallback_cname	= "fallback.foo.com"
 }`, randString)
 }

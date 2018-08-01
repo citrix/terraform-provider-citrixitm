@@ -1,6 +1,7 @@
 package citrixitm
 
 import (
+	"log"
 	"net/url"
 
 	"github.com/cedexis/go-itm/itm"
@@ -20,13 +21,14 @@ func newConfig(clientID string, clientSecret string, baseURL *url.URL) *config {
 		ClientSecret: clientSecret,
 		BaseURL:      baseURL,
 	}
-	if "/" != result.BaseURL.Path[len(result.BaseURL.Path)-1:] {
+	log.Printf("[DEBUG] Checking URL for trailing slash: %s", result.BaseURL.String())
+	if 0 == len(result.BaseURL.Path) || "/" != result.BaseURL.Path[len(result.BaseURL.Path)-1:] {
 		result.BaseURL.Path += "/"
 	}
 	return &result
 }
 
-// Returns an initialized itm.Client used to communicat with the Citrix ITM API
+// Returns an initialized itm.Client used to communicate with the Citrix ITM API
 func (c *config) Client() (*itm.Client, error) {
 	rel, _ := url.Parse("oauth/token")
 	tokenURL := c.BaseURL.ResolveReference(rel)

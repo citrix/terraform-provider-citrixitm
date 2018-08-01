@@ -1,6 +1,7 @@
 package citrixitm
 
 import (
+	"log"
 	"net/url"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -26,10 +27,16 @@ func Provider() terraform.ResourceProvider {
 				DefaultFunc: schema.EnvDefaultFunc("ITM_CLIENT_SECRET", nil),
 				Description: "The OAuth client secret for the Citrix ITM public API.",
 			},
+			// The user can control which API instance to use in multiple ways:
+			//  * By setting the `base_url` property in their configuration (preferred)
+			//  * By setting the ITM_BASE_URL environment variable
+			//
+			// If neither of these things is done, the prod base URL is used
+			// based on the DefaultFunc setting below
 			"base_url": {
 				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "https://portal.cedexis.com/api",
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("ITM_BASE_URL", "https://portal.cedexis.com/api"),
 				Description: "The base URL for Citrix ITM API requests",
 			},
 		},
@@ -40,6 +47,7 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	baseURL, _ := url.Parse(d.Get("base_url").(string))
+	log.Printf("[INFO] New client base URL: %s", baseURL.String())
 	config := newConfig(
 		d.Get("client_id").(string),
 		d.Get("client_secret").(string),

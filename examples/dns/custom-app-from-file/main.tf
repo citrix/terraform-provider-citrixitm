@@ -5,7 +5,6 @@ terraform {
 provider "citrixitm" {
     client_id     = "${var.itm_client_id}"
     client_secret = "${var.itm_client_secret}"
-    base_url      = "${var.itm_base_url}"
 }
 
 resource "citrixitm_dns_app" "website" {

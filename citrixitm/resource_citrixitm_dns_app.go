@@ -49,7 +49,7 @@ func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, meta interface{}) err
 		d.Get("fallback_cname").(string),
 		d.Get("app_data").(string),
 	)
-	log.Printf("[DEBUG] DNS app create options: %#v\n", opts)
+	log.Printf("[DEBUG] DNS app create options: %#v", opts)
 	app, err := client.DnsApps.Create(&opts)
 	if err != nil {
 		return nil
@@ -94,7 +94,7 @@ func update(id int, c *itm.Client, d *schema.ResourceData) error {
 			d.Get("fallback_cname").(string),
 			d.Get("app_data").(string),
 		)
-		log.Printf("[DEBUG] DNS app update options: %#v\n", opts)
+		log.Printf("[DEBUG] DNS app update options: %#v", opts)
 		_, err := c.DnsApps.Update(id, &opts)
 		if err != nil {
 			return nil

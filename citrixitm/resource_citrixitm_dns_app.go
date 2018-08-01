@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/cedexis/go-itm/itm"
 	"github.com/hashicorp/terraform/helper/schema"
@@ -18,8 +19,9 @@ func resourceCitrixITMDnsApp() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"app_data": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:             schema.TypeString,
+				Required:         true,
+				DiffSuppressFunc: resourceCitrixITMDnsAppDiffSuppress,
 			},
 			"description": {
 				Type:     schema.TypeString,
@@ -109,4 +111,8 @@ func delete(id int, c *itm.Client, d *schema.ResourceData) error {
 		return fmt.Errorf("There was a problem deleting app (id %d): %v", id, err)
 	}
 	return nil
+}
+
+func resourceCitrixITMDnsAppDiffSuppress(k, old, new string, d *schema.ResourceData) bool {
+	return strings.TrimSpace(old) == strings.TrimSpace(new)
 }

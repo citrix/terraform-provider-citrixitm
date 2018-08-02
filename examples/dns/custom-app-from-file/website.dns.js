@@ -1,7 +1,9 @@
 var prefixes = [
-    'foo',
-    'bar',
-    'baz'
+    'foo'
+    ,'bar'
+    ,'baz'
+    ,'qux'
+    // ,'quux'
 ];
 
 var lastIndex = 0;

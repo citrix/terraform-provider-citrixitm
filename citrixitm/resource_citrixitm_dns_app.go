@@ -31,12 +31,21 @@ func resourceCitrixITMDnsApp() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"fallback_ttl": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  20,
+			},
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"cname": {
 				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"version": {
+				Type:     schema.TypeInt,
 				Computed: true,
 			},
 		},
@@ -52,7 +61,7 @@ func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, meta interface{}) err
 		d.Get("app_data").(string),
 	)
 	log.Printf("[DEBUG] DNS app create options: %#v", opts)
-	app, err := client.DnsApps.Create(&opts)
+	app, err := client.DnsApps.Create(&opts, true)
 	if err != nil {
 		return nil
 	}
@@ -74,14 +83,17 @@ func withExistingResource(f ProcessAppFunc) func(*schema.ResourceData, interface
 
 func read(id int, c *itm.Client, d *schema.ResourceData) error {
 	app, err := c.DnsApps.Get(id)
+	log.Printf("[DEBUG] Inside read; app: %#v", app)
 	if err != nil {
 		return fmt.Errorf("Error retrieving app: %s", err)
 	}
 	d.Set("name", app.Name)
 	d.Set("description", app.Description)
 	d.Set("fallback_cname", app.FallbackCname)
+	d.Set("fallback_ttl", app.FallbackTtl)
 	d.Set("app_data", app.AppData)
 	d.Set("cname", app.AppCname)
+	d.Set("version", app.Version)
 	return nil
 }
 
@@ -89,6 +101,7 @@ func update(id int, c *itm.Client, d *schema.ResourceData) error {
 	if d.HasChange("name") ||
 		d.HasChange("description") ||
 		d.HasChange("fallback_cname") ||
+		d.HasChange("fallback_ttl") ||
 		d.HasChange("app_data") {
 		opts := itm.NewDnsAppOpts(
 			d.Get("name").(string),
@@ -97,7 +110,7 @@ func update(id int, c *itm.Client, d *schema.ResourceData) error {
 			d.Get("app_data").(string),
 		)
 		log.Printf("[DEBUG] DNS app update options: %#v", opts)
-		_, err := c.DnsApps.Update(id, &opts)
+		_, err := c.DnsApps.Update(id, &opts, true)
 		if err != nil {
 			return nil
 		}

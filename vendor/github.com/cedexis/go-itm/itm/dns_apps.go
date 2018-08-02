@@ -35,15 +35,17 @@ type DnsApp struct {
 	Description   string `json:"description"`
 	Enabled       bool   `json:"enabled"`
 	FallbackCname string `json:"fallbackCname"`
+	FallbackTtl   int    `json:"ttl"`
 	AppData       string `json:"appData"`
 	AppCname      string `json:"cname"`
+	Version       int    `json:"version"`
 }
 
 type DnsAppsListTestFunc func(*DnsApp) bool
 
 type DnsAppsService interface {
-	Create(*dnsAppOpts) (*DnsApp, error)
-	Update(int, *dnsAppOpts) (*DnsApp, error)
+	Create(*dnsAppOpts, bool) (*DnsApp, error)
+	Update(int, *dnsAppOpts, bool) (*DnsApp, error)
 	Get(int) (*DnsApp, error)
 	Delete(int) error
 	List(opts ...DnsAppsListTestFunc) ([]DnsApp, error)
@@ -53,14 +55,18 @@ type DnsAppsServiceImpl struct {
 	client *Client
 }
 
-func (s *DnsAppsServiceImpl) Create(opts *dnsAppOpts) (*DnsApp, error) {
+func (s *DnsAppsServiceImpl) Create(opts *dnsAppOpts, publish bool) (*DnsApp, error) {
 	jsonOpts, err := json.Marshal(opts)
 	if err != nil {
 		return nil, err
 	}
+	publishVal := "false"
+	if publish {
+		publishVal = "true"
+	}
 	qs := &url.Values{
 		"publish": []string{
-			"false",
+			publishVal,
 		},
 	}
 	resp, err := s.client.post(dnsAppsBasePath, jsonOpts, qs)
@@ -75,14 +81,18 @@ func (s *DnsAppsServiceImpl) Create(opts *dnsAppOpts) (*DnsApp, error) {
 	return &result, nil
 }
 
-func (s *DnsAppsServiceImpl) Update(id int, opts *dnsAppOpts) (*DnsApp, error) {
+func (s *DnsAppsServiceImpl) Update(id int, opts *dnsAppOpts, publish bool) (*DnsApp, error) {
 	jsonOpts, err := json.Marshal(opts)
 	if err != nil {
 		return nil, err
 	}
+	publishVal := "false"
+	if publish {
+		publishVal = "true"
+	}
 	qs := &url.Values{
 		"publish": []string{
-			"false",
+			publishVal,
 		},
 	}
 	resp, err := s.client.put(getDnsAppPath(id), jsonOpts, qs)

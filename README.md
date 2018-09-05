@@ -35,6 +35,6 @@ $ make build
 
 **TODO**
 
-## Developing the Provider
+## Contributing
 
-**TODO**
+Contributions are welcome. Please see [Contributing](./CONTRIBUTING.md). 

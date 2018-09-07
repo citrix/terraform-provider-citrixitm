@@ -10,7 +10,7 @@ The following guidelines assume a UNIX environment and a Bash shell.
 
 #### GOPATH
 
-The GOPATH environment variable specifies a directory containing the source code and binaries for a user's local Go projects. The Make targets involving Terraform website integration utilize GOPATH too, so you'll need to set this whether or not you'll be hacking on the provider Go code itself. The standard is a directory named "go" within your home directory.
+The `GOPATH` environment variable specifies a directory (or multiple directories) containing the source code and binaries for a user's local Go projects. The Make targets involving Terraform website integration utilize `GOPATH` too, so you'll need to set this whether or not you'll be hacking on the provider Go code itself. The standard is a directory named "go" within your home directory.
 
 To set this variable for the current session:
 

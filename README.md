@@ -17,15 +17,15 @@ This project is maintained by the developers at [Cedexis](https://www.cedexis.co
 
 ## Building The Provider
 
-To build the provider, make sure you have a working Go installation. The steps below assume that the GOPATH environment variable is set.
+To build the provider, make sure you have a working Go installation.
 
-Start by cloning the provider repository to: `$GOPATH/src/github.com/cedexis/terraform-provider-citrixitm`
+For the sake of simplicity, we'll assume that your `GOPATH` environment variable is set to include `$HOME/go`. Otherwise, you'll need to adapt the instructions below so that the `terraform-provider-citrixitm` repo goes in a suitable location.
 
-Example:
+Clone the `terraform-provider-citrixitm` repo:
 
-```sh
-$ mkdir -p $GOPATH/src/github.com/cedexis
-$ cd $GOPATH/src/github.com/cedexis
+```bash
+$ mkdir -p $HOME/go/src/github.com/cedexis
+$ cd $HOME/go/src/github.com/cedexis
 $ git clone git@github.com:cedexis/terraform-provider-citrixitm.git
 ```
 
@@ -33,12 +33,12 @@ Enter the project root directory and build the provider by running `make build`.
 
 Example:
 
-```sh
-$ cd $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
+```bash
+$ cd $HOME/go/src/github.com/cedexis/terraform-provider-citrixitm
 $ make build
 ```
 
-The `build` target does a couple of things. First it executes `scripts/gofmtcheck.sh`, which makes sure that all of the code files in the repository conform to Go formatting standards. Assuming the formatting check passes, it then executes `go install`, which builds the plugin binary and places it within `$GOPATH/bin`.
+The `build` target does a couple of things. First it executes `scripts/gofmtcheck.sh`, which makes sure that all of the code files in the repository conform to Go formatting standards. Assuming the formatting check passes, it then executes `go install`, which builds the plugin binary and places it within `$HOME/go/bin`.
 
 ## Using the provider
 
@@ -48,7 +48,7 @@ Example:
 
 ```bash
 $ mkdir -p $HOME/.terraform.d/plugins
-$ cp $GOPATH/bin/terraform-provider-citrixitm $HOME/.terraform.d/plugins/
+$ cp $HOME/go//bin/terraform-provider-citrixitm $HOME/.terraform.d/plugins/
 ```
 
 The Citrix ITM provider is now available for use in any Terraform configurations referencing it.

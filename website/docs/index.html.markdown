@@ -60,3 +60,17 @@ resource "citrixitm_dns_app" "website" {
     fallback_cname   = "origin.example.com"
 }
 ```
+
+## Authentication
+
+Terraform requires authentication to use the Citrix ITM API. You will need to set up a client ID and secret pair using the Citrix ITM Portal [OAuth Configuration page](https://portal.cedexis.com/ui/api/oauth). Be sure to keep these credentials secure.
+
+## Configuration Reference
+
+The Citrix ITM provider is configured by setting attributes in the provider block.
+
+The following attributes are supported:
+
+* `client_id` - (Required) The client ID to be used for authenticating with the API.
+
+* `client_secret` - (Required) The client secret corresponding to the client ID.

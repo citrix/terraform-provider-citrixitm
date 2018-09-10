@@ -14,7 +14,7 @@ Use the navigation on the left to read about the available resources.
 
 ## Example Usage
 
-Suppose we have a DNS routing application specified in a file named example.js.
+The following set of files can be used to create and maintain a Citrix ITM application via Terraform.
 
 **example.js**
 
@@ -29,7 +29,17 @@ function onRequest(request, response) {
 }
 ```
 
-The following Terraform configuration can be used to create and maintain a Citrix ITM application using the contents of that file.
+**vars.tf**
+
+```hcl
+variable "itm_client_id" {
+    description = "Client ID for the Citrix ITM API"
+}
+
+variable "itm_client_secret" {
+    description = "Client secret for the Citrix ITM API"
+}
+```
 
 **main.tf**
 
@@ -44,9 +54,9 @@ provider "citrixitm" {
 }
 
 resource "citrixitm_dns_app" "website" {
-    name             = "Simple Round Robin"
-    description      = "DNS routing for the website"
-    app_data         = "${file("${path.module}/website.dns.js")}"
+    name             = "My App"
+    description      = "A very simple DNS routing app"
+    app_data         = "${file("${path.module}/example.js")}"
     fallback_cname   = "origin.example.com"
 }
 ```

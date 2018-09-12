@@ -10,7 +10,7 @@ $ make build
 go install
 ```
 
-This should place a binary file named `terraform-provider-citrixitm` within `$GOPATH/bin`. If you plan on actually using it with Terraform, you should copy that file into ~/.terraform.d/plugins/.
+This should place a binary file named `terraform-provider-citrixitm` within `$GOPATH/bin`. If you plan on actually using it with Terraform, you should copy that file into ~/.terraform.d/plugins/ at this point.
 
 ## Testing
 

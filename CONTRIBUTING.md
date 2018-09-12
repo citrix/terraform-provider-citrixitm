@@ -14,7 +14,7 @@ This should place a binary file named `terraform-provider-citrixitm` within `$GO
 
 ## Testing
 
-An important part of provider development is testing. There are two types:
+An important part of provider development is testing. There are two types of tests:
 
 ### Unit Tests
 

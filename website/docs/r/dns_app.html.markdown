@@ -1,7 +1,7 @@
 ---
 layout: "citrixitm"
 page_title: "Citrix ITM: citrixitm_dns_app"
-sidebar_current: "docs-resource-citrixitm-dns-app"
+sidebar_current: "docs-citrixitm-resource-dns-app"
 description: |-
   Manages a Citrix ITM DNS app resource.
 ---

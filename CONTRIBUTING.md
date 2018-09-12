@@ -1,5 +1,7 @@
 # Provider Development
 
+Contributions are welcome. For most people, the best way is to fork the repository and make your changes there, then issue a pull request to have your changes merged into the `master` branch of the main repository. See [Creating a pull request from a fork](https://help.github.com/articles/creating-a-pull-request-from-a-fork/).
+
 ## Compiling
 
 To compile the provider run `make build` from within the project root directory:

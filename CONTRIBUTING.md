@@ -1,6 +1,6 @@
 # Provider Development
 
-Contributions are welcome. For most people, the best way is to fork the repository and make your changes there, then issue a pull request to have your changes merged into the `master` branch of the main repository. See [Creating a pull request from a fork](https://help.github.com/articles/creating-a-pull-request-from-a-fork/).
+Contributions are welcome! For most, the best way is to make your changes in a fork, then issue a pull request to have your changes merged back upstream. See [Creating a pull request from a fork](https://help.github.com/articles/creating-a-pull-request-from-a-fork/).
 
 ## Compiling
 

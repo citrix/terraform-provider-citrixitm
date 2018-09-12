@@ -8,7 +8,7 @@ description: |-
 
 # Citrix ITM Provider
 
-This provider allows you to manager your [Citrix ITM](https://www.cedexis.com/) infrastructure using Terraform.
+This provider allows you to manage [Citrix ITM](https://www.cedexis.com/) infrastructure using Terraform.
 
 Use the navigation on the left to read about the available resources.
 

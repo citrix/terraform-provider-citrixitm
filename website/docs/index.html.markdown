@@ -71,7 +71,7 @@ The Citrix ITM provider is configured by setting attributes in the provider bloc
 
 The following attributes are supported:
 
-*    `client_id` - (Required) The client ID to be used for authenticating with the API.
+*   `client_id` - (Required) The client ID to be used for authenticating with the API.
 
 *   `client_secret` - (Required) The client secret corresponding to the client ID.
 

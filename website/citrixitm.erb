@@ -10,17 +10,20 @@
           <a href="/docs/providers/citrixitm/index.html">Citrix ITM Provider</a>
         </li>
 
+        <% if false %>
         <li<%= sidebar_current("docs-citrixitm-datasource") %>>
           <a href="#">Data Sources</a>
           <ul class="nav nav-visible">
-            <%# TODO %>
           </ul>
         </li>
+        <% end %>
 
         <li<%= sidebar_current("docs-citrixitm-resource") %>>
           <a href="#">Resources</a>
           <ul class="nav nav-visible">
-            <%# TODO %>
+            <li<%= sidebar_current("docs-citrixitm-resource-dns-app") %>>
+              <a href="/docs/providers/citrixitm/r/dns_app.html">citrixitm_dns_app</a>
+            </li>
           </ul>
         </li>
       </ul>

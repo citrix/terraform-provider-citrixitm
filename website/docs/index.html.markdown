@@ -71,10 +71,10 @@ The Citrix ITM provider is configured by setting attributes in the provider bloc
 
 The following attributes are supported:
 
-* `client_id` - (Required) The client ID to be used for authenticating with the API.
+*    `client_id` - (Required) The client ID to be used for authenticating with the API.
 
-* `client_secret` - (Required) The client secret corresponding to the client ID.
+*   `client_secret` - (Required) The client secret corresponding to the client ID.
 
-* `base_url` - (Optional) The base URL for Citrix ITM API endpoints. Default: https://portal.cedexis.com/api
+*   `base_url` - (Optional) The base URL for Citrix ITM API endpoints. Default: https://portal.cedexis.com/api
 
-  https://portalha.cedexis.com/api can be used to test the provider. **Use with caution!** If a resource is created under one base URL and you later run `terraform apply` with a different base URL, your Terraform state could wind up a mess.
+    https://portalha.cedexis.com/api can be used for development and testing purposes. **Use with caution!** If a resource is created under one base URL and you later run `terraform apply` with a different base URL, your Terraform state could wind up a mess.

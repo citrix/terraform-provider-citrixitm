@@ -65,6 +65,8 @@ resource "citrixitm_dns_app" "website" {
 
 Terraform requires authentication to use the Citrix ITM API. You will need to set up a client ID and secret pair using the Citrix ITM Portal [OAuth Configuration page](https://portal.cedexis.com/ui/api/oauth). Be sure to keep these credentials secure.
 
+If you aren't able to reach the OAuth configuration page, then most likely your account does not have API access enabled. Please send an email to [Citrix ITM Support](mailto:support@cedexis.com) to request access.
+
 ## Configuration Reference
 
 The Citrix ITM provider is configured by setting attributes in the provider block.

@@ -50,6 +50,9 @@ The `build` target does a couple of things. First it executes `scripts/gofmtchec
 
 ### OSX Setup With HomeBrew
 This section assumes you already have [HomeBrew](https://brew.sh/) installed.
+
+Ensure you have `$GOROOT` and `$GOPATH` properly configured after installing `golang`.
+
 ```bash
 brew install golang
 mkdir -p $GOPATH/src/github.com/cedexis

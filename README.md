@@ -68,7 +68,7 @@ Using the provider requires a Citrix ITM account with access to the API. You can
 
 To find out if your account has access to the API, navigate to `My Account > API > Oauth Configuration`. If you don't see these options then you'll need to send an email to [Cedexis Support](mailto:support@cedexis.comi) and request API access.
 
-![Navigating to OAuth Config](image/oauth_nav.png)
+<img src="./images/oauth_nav.png" alt="Navigate to OAuth Config Page" width="400" style="border:1px solid black"/>
 
 ### Installation
 

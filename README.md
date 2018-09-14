@@ -69,7 +69,7 @@ Example:
 
 ```bash
 $ mkdir -p $HOME/.terraform.d/plugins
-$ cp $GOPATH/go/bin/terraform-provider-citrixitm $HOME/.terraform.d/plugins/
+$ cp $GOPATH/bin/terraform-provider-citrixitm $HOME/.terraform.d/plugins/
 ```
 
 The Citrix ITM provider is now available for use in any Terraform configurations referencing it.

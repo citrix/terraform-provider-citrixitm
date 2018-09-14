@@ -66,7 +66,7 @@ You should now be ready to start using the provider.
 
 Using the provider requires a Citrix ITM account with access to the API. You can sign up by visiting the [Citrix ITM Portal](https://portal.cedexis.com).
 
-To find out if your account has access to the API, navigate to `My Account > API > Oauth Configuration`. If you don't see these options then you'll need to send an email to [Cedexis Support](mailto:support@cedexis.comi) and request API access.
+To find out if your account has access to the API, navigate to `My Account > API > Oauth Configuration`. If you don't see these options then you'll need to send an email to [Citrix ITM Support](mailto:support@cedexis.com) and request API access.
 
 <img src="./images/oauth_nav.png" alt="Navigate to OAuth Config Page" width="400"/>
 

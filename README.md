@@ -53,9 +53,8 @@ This section assumes you already have [HomeBrew](https://brew.sh/) installed.
 ```bash
 brew install golang
 mkdir -p $GOPATH/src/github.com/cedexis
-go get github.com/hashicorp/terraform/plugin
-go get github.com/cedexis/terraform-provider-citrixitm/citrixitm
-git clone git@github.com:cedexis/terraform-provider-citrixitm.git $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
+git clone git@github.com:cedexis/terraform-provider-citrixitm.git \
+  $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
 cd $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
 make build
 ```

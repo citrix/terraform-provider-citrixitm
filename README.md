@@ -32,8 +32,8 @@ For the sake of simplicity, we'll assume that your `GOPATH` environment variable
 Clone the `terraform-provider-citrixitm` repo:
 
 ```bash
-$ mkdir -p $GOPATH/go/src/github.com/cedexis
-$ cd $GOPATH/go/src/github.com/cedexis
+$ mkdir -p $GOPATH/src/github.com/cedexis
+$ cd $GOPATH/src/github.com/cedexis
 $ git clone git@github.com:cedexis/terraform-provider-citrixitm.git
 ```
 
@@ -42,16 +42,14 @@ Enter the project root directory and build the provider by running `make build`.
 Example:
 
 ```bash
-$ cd $GOPATH/go/src/github.com/cedexis/terraform-provider-citrixitm
+$ cd $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
 $ make build
 ```
 
-The `build` target does a couple of things. First it executes `scripts/gofmtcheck.sh`, which makes sure that all of the code files in the repository conform to Go formatting standards. Assuming the formatting check passes, it then executes `go install`, which builds the plugin binary and places it within `$HOME/go/bin`.
+The `build` target does a couple of things. First it executes `scripts/gofmtcheck.sh`, which makes sure that all of the code files in the repository conform to Go formatting standards. Assuming the formatting check passes, it then executes `go install`, which builds the plugin binary and places it within `$GOPATH/bin`.
 
 ### OSX Setup With HomeBrew
 This section assumes you already have [HomeBrew](https://brew.sh/) installed.
-
-Ensure you have `$GOROOT` and `$GOPATH` properly configured after installing `golang`.
 
 ```bash
 brew install golang
@@ -63,7 +61,7 @@ make build
 ```
 You should now be ready to start using the provider.
 
-## Using The provider
+## Using The Provider
 
 The Citrix ITM provider is a third party plugin and must be installed manually. This is simply a matter of taking the executable that you built in the previous section and copying it into the `$HOME/.terraform.d/plugins` directory.
 

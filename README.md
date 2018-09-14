@@ -10,6 +10,14 @@
 
 This project is maintained by the developers at [Cedexis](https://www.cedexis.com/) (now part of Citrix&#174;).
 
+## Table Of Contents
+- [Requirements](#requirements)
+- [Building The Provider](#building-the-provider)
+- [OSX Setup With HomeBrew](#osx-setup-with-homebrew)
+- [Using The Provider](#using-the-provider)
+- [Where To Go Next](#where-to-go-next)
+- [Contributing](#contributing)
+
 ## Requirements
 
 - [Terraform](https://www.terraform.io/downloads.html) 0.11+
@@ -24,8 +32,8 @@ For the sake of simplicity, we'll assume that your `GOPATH` environment variable
 Clone the `terraform-provider-citrixitm` repo:
 
 ```bash
-$ mkdir -p $HOME/go/src/github.com/cedexis
-$ cd $HOME/go/src/github.com/cedexis
+$ mkdir -p $GOPATH/go/src/github.com/cedexis
+$ cd $GOPATH/go/src/github.com/cedexis
 $ git clone git@github.com:cedexis/terraform-provider-citrixitm.git
 ```
 
@@ -34,13 +42,26 @@ Enter the project root directory and build the provider by running `make build`.
 Example:
 
 ```bash
-$ cd $HOME/go/src/github.com/cedexis/terraform-provider-citrixitm
+$ cd $GOPATH/go/src/github.com/cedexis/terraform-provider-citrixitm
 $ make build
 ```
 
 The `build` target does a couple of things. First it executes `scripts/gofmtcheck.sh`, which makes sure that all of the code files in the repository conform to Go formatting standards. Assuming the formatting check passes, it then executes `go install`, which builds the plugin binary and places it within `$HOME/go/bin`.
 
-## Using the provider
+### OSX Setup With HomeBrew
+This section assumes you already have [HomeBrew](https://brew.sh/) installed.
+```bash
+brew install golang
+mkdir -p $GOPATH/src/github.com/cedexis
+go get github.com/hashicorp/terraform/plugin
+go get github.com/cedexis/terraform-provider-citrixitm/citrixitm
+git clone git@github.com:cedexis/terraform-provider-citrixitm.git $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
+cd $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
+make build
+```
+You should now be ready start to start using the provider
+
+## Using The provider
 
 The Citrix ITM provider is a third party plugin and must be installed manually. This is simply a matter of taking the executable that you built in the previous section and copying it into the `$HOME/.terraform.d/plugins` directory.
 
@@ -48,15 +69,15 @@ Example:
 
 ```bash
 $ mkdir -p $HOME/.terraform.d/plugins
-$ cp $HOME/go//bin/terraform-provider-citrixitm $HOME/.terraform.d/plugins/
+$ cp $GOPATH/go/bin/terraform-provider-citrixitm $HOME/.terraform.d/plugins/
 ```
 
 The Citrix ITM provider is now available for use in any Terraform configurations referencing it.
 
-## Where to go next
+## Where To Go Next
 
 Why not head over to the [Custom App From File](examples/dns/custom-app-from-file) example and give it a try?
 
 ## Contributing
 
-Contributions are welcome. Please see [Contributing](./CONTRIBUTING.md). 
+Contributions are welcome. Please see [Contributing](./CONTRIBUTING.md).

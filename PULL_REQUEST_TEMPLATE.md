@@ -1,15 +1,11 @@
-# Summary
+## Summary
 
-A high level summary of the change.
+## Description of Change
 
-# Description of Change
+## Known Issues
 
-A more detailed description, if possible.
+## Applicable Github Issues
 
-# Known Issues
-
-Does the change come with any new known issues?
-
-# Applicable Github Issues
-
-If there are any relevant Github issues, please list them here.
+*
+*
+*

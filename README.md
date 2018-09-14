@@ -61,7 +61,7 @@ git clone git@github.com:cedexis/terraform-provider-citrixitm.git \
 cd $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
 make build
 ```
-You should now be ready start to start using the provider
+You should now be ready to start using the provider.
 
 ## Using The provider
 

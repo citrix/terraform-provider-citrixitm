@@ -27,7 +27,7 @@ This project is maintained by the developers at [Cedexis](https://www.cedexis.co
 
 To build the provider, make sure you have a working Go installation.
 
-For the sake of simplicity, we'll assume that your `GOPATH` environment variable is set to include `$HOME/go`. Otherwise, you'll need to adapt the instructions below so that the `terraform-provider-citrixitm` repo goes in a suitable location.
+For simplicity, we'll assume that your `GOPATH` environment variable represents a single directory (e.g. `$HOME/go`). If yours names a set of directories then you'll need to adapt these instructions so that the `terraform-provider-citrixitm` repo is placed in a suitable location.
 
 Clone the `terraform-provider-citrixitm` repo:
 

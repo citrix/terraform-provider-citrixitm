@@ -19,13 +19,13 @@ The example module includes the following files:
 
 Before we can import the app, it must first be created using the Citrix ITM Portal UI. Go to the [Openmix applications page](https://portal.cedexis.com/ui/openmix/applications) now and create a new application. You can use the app.js file included in this example as the application code file.
 
-<img src="./res/new-app-to-import.png" width="200px" alt="New App Basic Settings">
+Give the file an name that's easy to remember.
 
+<img src="./res/new-app-to-import.png" width="400px" alt="New App Basic Settings">
 
+Take note of the application ID.
 
-
-
-
+<img src="./res/app-id.png" width="400px" alt="Note App ID">
 
 ## Running the Example
 

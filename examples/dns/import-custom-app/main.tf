@@ -7,7 +7,7 @@ provider "citrixitm" {
     client_secret = "${var.itm_client_secret}"
 }
 
-resource "citrixitm_dns_app" "website" {
+resource "citrixitm_dns_app" "simple_app" {
     name             = "My Static App"
     description      = "A simple static response app"
     app_data         = "${file("${path.module}/app.js")}"

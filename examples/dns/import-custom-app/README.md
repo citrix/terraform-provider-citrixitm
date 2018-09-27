@@ -242,4 +242,19 @@ configuration and real physical resources that exist. As a result, no
 actions need to be performed.
 ```
 
+To view the configured output variables, run:
+
+```bash
+terraform output
+```
+
+Example:
+
+```bash
+$ terraform output
+dns_app_cname = 2-01-d896-001c.cdx.cedexis.net
+dns_app_id = 28
+dns_app_version = 2
+```
+
 From this point on, the pre-existing DNS app can be managed using Terraform.

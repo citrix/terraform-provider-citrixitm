@@ -22,6 +22,7 @@ This project is maintained by the developers at [Cedexis](https://www.cedexis.co
 
 - [Terraform](https://www.terraform.io/downloads.html) 0.11+
 - [Go](https://golang.org/doc/install) 1.11+ (to build the provider plugin)
+- A Citrix ITM account with API access (see below)
 
 ## Building The Provider
 
@@ -62,6 +63,14 @@ make build
 You should now be ready to start using the provider.
 
 ## Using The Provider
+
+Using the provider requires a Citrix ITM account with access to the API. You can sign up by visiting the [Citrix ITM Portal](https://portal.cedexis.com).
+
+To find out if your account has access to the API, navigate to `My Account > API > Oauth Configuration`. If you don't see these options then you'll need to send an email to [Citrix ITM Support](mailto:support@cedexis.com) and request API access.
+
+<img src="./images/oauth_nav.png" alt="Navigate to OAuth Config Page" width="400"/>
+
+### Installation
 
 The Citrix ITM provider is a third party plugin and must be installed manually. This is simply a matter of taking the executable that you built in the previous section and copying it into the `$HOME/.terraform.d/plugins` directory.
 

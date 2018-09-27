@@ -2,6 +2,8 @@
 
 Contributions are welcome! For most, the best way is to make your changes in a fork, then issue a pull request to have your changes merged back upstream. See [Creating a pull request from a fork](https://help.github.com/articles/creating-a-pull-request-from-a-fork/).
 
+Most development activity requires having a Citrix ITM account with API access enabled. If you're unable to access the OAuth configuration page to create credentials (see below), it most likely means that your account doesn't have the necessary permissions. If that's the case, please send an email to [Citrix ITM Support](mailto:support@cedexis.com) to request access to the API.
+
 ## Compiling
 
 To compile the provider run `make build` from within the project root directory:

@@ -42,7 +42,7 @@ Name the app "Test Import". This differs from the name "My Static App" that is s
 
 <img src="./res/new-app-to-import.png" width="400px" alt="New App Basic Settings">
 
-Set the app fallback CNAME. For purposes of this example, you can set it to anything.
+Set the app fallback CNAME. The resource configuration specifies "origin.example.com", so if you set it to anything else, Terraform will reconcile the difference by changing production to match the configuration later.
 
 <img src="./res/choose-fallback-cname.png" width="400px" alt="Choose Fallback CNAME">
 

@@ -60,7 +60,11 @@ Take note of the application ID.
 
 ### Import the DNS Routing App
 
-The first step is to initialize the module. From within the example module directory, run `terraform init`:
+The first step is to initialize the module. From within the example module directory, run:
+
+```bash
+terraform init
+```
 
 Example:
 
@@ -80,7 +84,13 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 ```
 
-Run `terraform import -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET citrixitm_dns_app.dns_simple <app_id>`, replacing `<app_id>` with the application ID you noted earlier.
+To link the existing production app and the Terraform resource configuration, run:
+
+```bash
+terraform import -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET citrixitm_dns_app.dns_simple <app_id>
+```
+
+Replace `<app_id>` with the application ID you noted earlier.
 
 Example:
 
@@ -97,7 +107,11 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 ```
 
-To view the Terraform state that has been imported, run `terraform state show citrixitm_dns_app.simple_app`.
+To view the Terraform state that has been imported, run:
+
+```bash
+terraform state show citrixitm_dns_app.simple_app
+```
 
 Example:
 
@@ -118,7 +132,11 @@ name           = Test Import
 version        = 1
 ```
 
-To see what differences exist between the imported state and the resource configuration, run `terraform plan -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET`.
+To see what differences exist between the imported state and the resource configuration, run:
+
+```bash
+terraform plan -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET
+```
 
 Example:
 
@@ -154,7 +172,11 @@ can't guarantee that exactly these actions will be performed if
 
 In the example output above, Terraform observes that there is a difference between the app name and description that we entered in the Portal and those listed in the resource configuration.
 
-To reconcile these differences, update the production app from the resource configuration by running `terraform apply -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET`.
+To reconcile these differences, update the production app from the resource configuration by running:
+
+```bash
+terraform apply -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET
+```
 
 Example:
 
@@ -195,7 +217,11 @@ dns_app_id = 28
 dns_app_version = 2
 ```
 
-Now run `terraform plan -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET` again to see that the production app and resource configuration are in sync.
+To see that the production app and resource configuration are in sync, run:
+
+```bash
+terraform plan -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET
+```
 
 Example:
 

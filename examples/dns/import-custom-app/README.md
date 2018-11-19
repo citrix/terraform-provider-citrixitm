@@ -38,7 +38,7 @@ These environment variables are used in place of the client ID and secret in the
 
 Before we can import the app, it must first be created using the Citrix ITM Portal UI. Go to the [Openmix applications page](https://portal.cedexis.com/ui/openmix/applications) now and create a new application.
 
-Name the app "Test Import". This differs from the name "My Static App" that is specified in the Terraform resource configuration. That is so we can demonstrate how Terraform will reconcile the difference later.  
+Name the app "Test Import". This differs from the name "My Static App" that is specified in the Terraform resource configuration. That is so we can demonstrate how Terraform will reconcile the difference later.
 
 <img src="./res/new-app-to-import.png" width="400px" alt="New App Basic Settings">
 

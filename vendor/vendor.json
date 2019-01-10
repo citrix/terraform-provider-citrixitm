@@ -231,12 +231,6 @@
 			"revisionTime": "2018-07-15T01:52:53Z"
 		},
 		{
-			"checksumSHA1": "qM3O8i7Jqjm4cZrNRo8lgf3vO48=",
-			"path": "github.com/cedexis/go-itm/itm",
-			"revision": "fac7f2b7d3d85d97845a129c75bb340bf2c0e70a",
-			"revisionTime": "2018-08-02T01:58:52Z"
-		},
-		{
 			"checksumSHA1": "CSPbwbyzqA6sfORicn4HFtIhF/c=",
 			"path": "github.com/davecgh/go-spew/spew",
 			"revision": "8991bc29aa16c548c550c7ff78260e27b9ab7c73",

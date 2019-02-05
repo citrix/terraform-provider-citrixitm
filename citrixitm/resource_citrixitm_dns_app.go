@@ -58,14 +58,14 @@ func resourceCitrixITMDnsApp() *schema.Resource {
 
 func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*itm.Client)
-	opts := itm.NewDnsAppOpts(
+	opts := itm.NewDNSAppOpts(
 		d.Get("name").(string),
 		d.Get("description").(string),
 		d.Get("fallback_cname").(string),
 		d.Get("app_data").(string),
 	)
 	log.Printf("[DEBUG] DNS app create options: %#v", opts)
-	app, err := client.DnsApps.Create(&opts, true)
+	app, err := client.DNSApps.Create(&opts, true)
 	if err != nil {
 		return nil
 	}
@@ -86,7 +86,7 @@ func withExistingResource(f ProcessAppFunc) func(*schema.ResourceData, interface
 }
 
 func read(id int, c *itm.Client, d *schema.ResourceData) error {
-	app, err := c.DnsApps.Get(id)
+	app, err := c.DNSApps.Get(id)
 	log.Printf("[DEBUG] Inside read; app: %#v", app)
 	if err != nil {
 		return fmt.Errorf("Error retrieving app: %s", err)
@@ -107,14 +107,14 @@ func update(id int, c *itm.Client, d *schema.ResourceData) error {
 		d.HasChange("fallback_cname") ||
 		d.HasChange("fallback_ttl") ||
 		d.HasChange("app_data") {
-		opts := itm.NewDnsAppOpts(
+		opts := itm.NewDNSAppOpts(
 			d.Get("name").(string),
 			d.Get("description").(string),
 			d.Get("fallback_cname").(string),
 			d.Get("app_data").(string),
 		)
 		log.Printf("[DEBUG] DNS app update options: %#v", opts)
-		_, err := c.DnsApps.Update(id, &opts, true)
+		_, err := c.DNSApps.Update(id, &opts, true)
 		if err != nil {
 			return nil
 		}
@@ -123,7 +123,7 @@ func update(id int, c *itm.Client, d *schema.ResourceData) error {
 }
 
 func delete(id int, c *itm.Client, d *schema.ResourceData) error {
-	err := c.DnsApps.Delete(id)
+	err := c.DNSApps.Delete(id)
 	if err != nil {
 		return fmt.Errorf("There was a problem deleting app (id %d): %v", id, err)
 	}

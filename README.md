@@ -26,24 +26,13 @@ This project is maintained by the developers at [Cedexis](https://www.cedexis.co
 
 ## Building The Provider
 
-To build the provider, make sure you have a working Go installation.
+To build the provider, make sure you have a working Go 1.11+ installation.
 
-For simplicity, we'll assume that your `GOPATH` environment variable represents a single directory (e.g. `$HOME/go`). If yours names a set of directories then you'll need to adapt these instructions so that the `terraform-provider-citrixitm` repo is placed in a suitable location.
-
-Clone the `terraform-provider-citrixitm` repo:
+Clone the `terraform-provider-citrixitm` repo. Since there is a mod.go file and we're using Go 1.11+, this can be anywhere on your system, not necessarily under $GOPATH. Then change to the repo directory and build the provider by running `make build`.
 
 ```bash
-$ mkdir -p $GOPATH/src/github.com/cedexis
-$ cd $GOPATH/src/github.com/cedexis
 $ git clone git@github.com:cedexis/terraform-provider-citrixitm.git
-```
-
-Enter the project root directory and build the provider by running `make build`.
-
-Example:
-
-```bash
-$ cd $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
+$ cd terraform-provider-citrixitm
 $ make build
 ```
 
@@ -53,12 +42,11 @@ The `build` target does a couple of things. First it executes `scripts/gofmtchec
 This section assumes you already have [HomeBrew](https://brew.sh/) installed.
 
 ```bash
-brew install golang
-mkdir -p $GOPATH/src/github.com/cedexis
-git clone git@github.com:cedexis/terraform-provider-citrixitm.git \
-  $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
-cd $GOPATH/src/github.com/cedexis/terraform-provider-citrixitm
-make build
+$ brew install golang
+$ cd ~/Documents
+$ git clone git@github.com:cedexis/terraform-provider-citrixitm.git
+$ cd terraform-provider-citrixitm
+$ make build
 ```
 You should now be ready to start using the provider.
 

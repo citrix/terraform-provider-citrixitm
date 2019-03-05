@@ -76,21 +76,11 @@ A community Terraform provider must include all of the documentation to be hoste
 
 The following guidelines assume a UNIX environment and a Bash shell.
 
-### GOPATH
+### GOPATH is out, go.mod is in
 
-The `GOPATH` environment variable specifies a directory (or multiple directories) containing the source code and binaries for a user's local Go projects. The Make targets involving Terraform website integration utilize `GOPATH` too, so you'll need to set this whether or not you'll be hacking on the provider Go code itself. The standard is a directory named "go" within your home directory.
+Since Go 1.11, `go mod` is used to handle dependencies. A project now specifies the external packages it uses, as well as their versions, in its go.mod file, and the Go tools handle the rest. There's no longer a need to bundle versioned dependecies in a vendor directory.
 
-To set this variable for the current session:
-
-```bash
-GOPATH=$HOME/go
-```
-
-To have this variable set at login, add the following line to ~/.profile:
-
-```bash
-export GOPATH="$HOME/go"
-```
+Go also no longer expects to find local packages within $GOPATH, and you no longer have to put the code you're working on there either. In other words, you can clone git@github.com:cedexis/terraform-provider-citrixitm.git anywhere you choose, rather than its having to be located within $GOPATH.
 
 ### Docker
 

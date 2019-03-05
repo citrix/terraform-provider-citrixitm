@@ -34,7 +34,7 @@ func testSweepDnsApps(region string) error {
 	}
 
 	client := meta.(*itm.Client)
-	apps, err := client.DnsApps.List()
+	apps, err := client.DNSApps.List()
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,7 @@ func testSweepDnsApps(region string) error {
 	for _, app := range apps {
 		if strings.HasPrefix(app.Name, "foo-") {
 			log.Printf("[INFO] Destroying DNS app %s", app.Name)
-			if err := client.DnsApps.Delete(app.Id); err != nil {
+			if err := client.DNSApps.Delete(app.Id); err != nil {
 				return err
 			}
 		}
@@ -54,7 +54,7 @@ func testSweepDnsApps(region string) error {
 }
 
 func TestAccDnsApp_basic(t *testing.T) {
-	var app itm.DnsApp
+	var app itm.DNSApp
 	randString := acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	appName = fmt.Sprintf("foo-%s", randString)
 	appNameUpdated = fmt.Sprintf("bar-%s", randString)
@@ -145,7 +145,7 @@ type testAccCitrixITMDnsAppExpectedAttributes struct {
 	FallbackCname string
 }
 
-func testAccCheckCitrixITMDnsAppAttributes(got *itm.DnsApp, want *testAccCitrixITMDnsAppExpectedAttributes) resource.TestCheckFunc {
+func testAccCheckCitrixITMDnsAppAttributes(got *itm.DNSApp, want *testAccCitrixITMDnsAppExpectedAttributes) resource.TestCheckFunc {
 	return func(s *terraform.State) (err error) {
 		if err = testValues("name", want.Name, got.Name); err != nil {
 			return
@@ -168,7 +168,7 @@ func testAccCheckCitrixITMDnsAppAttributes(got *itm.DnsApp, want *testAccCitrixI
 	}
 }
 
-func testAccCheckCitrixITMDnsAppExists(key string, app *itm.DnsApp) resource.TestCheckFunc {
+func testAccCheckCitrixITMDnsAppExists(key string, app *itm.DNSApp) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		res, ok := s.RootModule().Resources[key]
 		if !ok {
@@ -184,7 +184,7 @@ func testAccCheckCitrixITMDnsAppExists(key string, app *itm.DnsApp) resource.Tes
 		}
 
 		// Query the API to see if an app with the expected id exists.
-		gotten, err := client.DnsApps.Get(id)
+		gotten, err := client.DNSApps.Get(id)
 		if err != nil {
 			return err
 		}
@@ -259,7 +259,7 @@ func testAccCheckCitrixITMDnsAppDestroy(s *terraform.State) error {
 				return err
 			}
 			// Check for the existence of an app with this id
-			app, err := client.DnsApps.Get(id)
+			app, err := client.DNSApps.Get(id)
 			if err != nil {
 				return err
 			}

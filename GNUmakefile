@@ -2,6 +2,9 @@ TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 WEBSITE_REPO=github.com/hashicorp/terraform-website
 PKG_NAME=citrixitm
+DOCKER_SOURCE_DIR=/terraform-provider-$(PKG_NAME)
+DOCKER_IMAGE_NAME=$(PKG_NAME)-terraform
+DOCKER_CONTAINER_NAME=$(PKG_NAME)_tf_dev_container
 
 default: build
 
@@ -56,5 +59,43 @@ ifeq (,$(wildcard $(GOPATH)/src/$(WEBSITE_REPO)))
 	git clone https://$(WEBSITE_REPO) $(GOPATH)/src/$(WEBSITE_REPO)
 endif
 	@$(MAKE) -C $(GOPATH)/src/$(WEBSITE_REPO) website-provider-test PROVIDER_PATH=$(shell pwd) PROVIDER_NAME=$(PKG_NAME)
+
+docker-build:
+	@docker build -t $(DOCKER_IMAGE_NAME) .
+
+docker-run: docker-show-env check-itm-env
+ifndef ITM_HOST_MODULE_DIR
+	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,readonly=1,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) $(DOCKER_IMAGE_NAME) /bin/bash
+else
+	@echo "Attaching host directory $(ITM_HOST_MODULE_DIR) as a bind mount to /terraform-module inside the container."
+	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,readonly=1,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) --mount type=bind,src=$(ITM_HOST_MODULE_DIR),dst=/terraform-module $(DOCKER_IMAGE_NAME) /bin/bash
+endif
+
+docker-start:
+	docker/start_container.sh $(DOCKER_CONTAINER_NAME)
+
+docker-exec-bash:
+	@docker exec -it $(DOCKER_CONTAINER_NAME) /bin/bash
+
+docker-exec-install-plugin:
+	@docker exec -it $(DOCKER_CONTAINER_NAME) docker/install_plugin_binary.sh
+
+docker-show-env:
+	@echo ITM variables...
+	@echo ITM_BASE_URL: $(ITM_BASE_URL)
+	@echo ITM_CLIENT_ID: $(ITM_CLIENT_ID)
+	@echo ITM_CLIENT_SECRET: $(ITM_CLIENT_SECRET)
+	@echo ITM_HOST_MODULE_DIR: $(ITM_HOST_MODULE_DIR)
+
+check-itm-env:
+ifndef ITM_BASE_URL
+	$(error ITM_BASE_URL is undefined)
+endif
+ifndef ITM_CLIENT_ID
+	$(error ITM_CLIENT_ID is undefined)
+endif
+ifndef ITM_CLIENT_SECRET
+	$(error ITM_CLIENT_SECRET is undefined)
+endif
 
 .PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile website website-test

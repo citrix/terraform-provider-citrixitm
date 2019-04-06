@@ -9,6 +9,13 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
+const (
+	libraryName     = "terraform-provider-citrixitm"
+	libraryVersion  = "0.1.0"
+	libraryURL      = "https://github.com/cedexis/" + libraryName
+	userAgentString = libraryName + "/" + libraryVersion + " (" + libraryURL + ")"
+)
+
 type config struct {
 	ClientID     string
 	ClientSecret string
@@ -40,6 +47,7 @@ func (c *config) Client() (*itm.Client, error) {
 	client, err := itm.NewClient(
 		itm.HTTPClient(oauthConfig.Client(oauth2.NoContext)),
 		itm.BaseURL(c.BaseURL))
+	client.UserAgentString = userAgentString
 	if err != nil {
 		return nil, err
 	}

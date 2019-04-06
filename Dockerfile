@@ -24,5 +24,5 @@ RUN go mod download
 WORKDIR /tmp
 RUN wget https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip; unzip terraform_0.11.13_linux_amd64.zip; rm terraform_0.11.13_linux_amd64.zip; mv terraform /usr/local/bin/
 
-# Set the default working asdfa directory
+# Set the default working directory
 WORKDIR /terraform-provider-citrixitm

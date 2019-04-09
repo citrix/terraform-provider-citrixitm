@@ -63,6 +63,8 @@ endif
 docker-build:
 	@docker build -t $(DOCKER_IMAGE_NAME) .
 
+# docker-start is used to resume an existing exited container named
+# $(DOCKER_CONTAINER_NAME). Use docker-run to create a new container.
 docker-start:
 	docker/start_container.sh $(DOCKER_CONTAINER_NAME)
 
@@ -90,6 +92,8 @@ ifndef ITM_CLIENT_SECRET
 	$(error ITM_CLIENT_SECRET is undefined)
 endif
 
+# docker-run is used to create a container named $(DOCKER_CONTAINER_NAME).
+# Use docker-start to restart an existing exited container by that name.
 docker-run: docker-show-env check-itm-env
 ifndef ITM_HOST_MODULE_DIR
 	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,readonly=1,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) $(DOCKER_IMAGE_NAME) /bin/bash

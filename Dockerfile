@@ -5,12 +5,13 @@ RUN apk add --update \
     bash-completion \
     build-base \
     git \
+    shadow \
     vim
 
 # Some environment variables to influence Terraform behavior
 ENV TF_LOG=TRACE TF_LOG_PATH=/var/log/terraform.log
 
-ADD docker/passwd /etc/passwd
+RUN usermod --shell /bin/bash root
 ADD docker/bashrc.sh /root/.bashrc
 
 # Install Terraform binary for use executing ad hoc commands

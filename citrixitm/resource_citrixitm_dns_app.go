@@ -87,6 +87,7 @@ func withExistingResource(f ProcessAppFunc) func(*schema.ResourceData, interface
 
 func read(id int, c *itm.Client, d *schema.ResourceData) error {
 	app, err := c.DNSApps.Get(id)
+	log.Printf("[DEBUG] Inside read; app: %#v", app)
 	if err != nil {
 		return fmt.Errorf("Error retrieving app: %s", err)
 	}

@@ -1,6 +1,7 @@
 package citrixitm
 
 import (
+	"fmt"
 	"net/url"
 	"testing"
 )
@@ -25,5 +26,15 @@ func TestConfig(t *testing.T) {
 		if current.expectedBaseURL != c.BaseURL.String() {
 			t.Error(unexpectedValueString("Base URL", current.expectedBaseURL, c.BaseURL.String()))
 		}
+	}
+}
+
+func TestUserAgentStringOverride(t *testing.T) {
+	baseURL, _ := url.Parse("http://example.com/foo")
+	c := newConfig("some id", "some secret", baseURL)
+	client, _ := c.Client()
+	expectedUserAgentString := fmt.Sprintf("%s/%s (%s)", libraryName, libraryVersion, libraryURL)
+	if client.UserAgentString != expectedUserAgentString {
+		t.Error(unexpectedValueString("User Agent String", expectedUserAgentString, client.UserAgentString))
 	}
 }

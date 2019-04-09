@@ -20,6 +20,8 @@ github.com/blang/semver v3.5.1+incompatible/go.mod h1:kRBLl5iJ+tD4TcOOxsy/0fnweb
 github.com/bsm/go-vlq v0.0.0-20150828105119-ec6e8d4f5f4e/go.mod h1:N+BjUcTjSxc2mtRGSCPsat1kze3CUtvJN3/jTXlp29k=
 github.com/cedexis/go-itm v1.0.0 h1:tcnLi0u0xatMsJ74LrNWuFfiyqxShIoq7mas22bpbxs=
 github.com/cedexis/go-itm v1.0.0/go.mod h1:E62ZBgPOgT5r1dHBBPjh2xhL8JXM5glyxG80K8xCJK4=
+github.com/cedexis/go-itm v1.0.1 h1:YMkMHsbfpXCcO7JC4I/va9tKhqhnRg6sUbk8K5JTjRk=
+github.com/cedexis/go-itm v1.0.1/go.mod h1:E62ZBgPOgT5r1dHBBPjh2xhL8JXM5glyxG80K8xCJK4=
 github.com/cheggaaa/pb v1.0.27/go.mod h1:pQciLPpbU0oxA0h+VJYYLxO+XeDQb5pZijXscXHm81s=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

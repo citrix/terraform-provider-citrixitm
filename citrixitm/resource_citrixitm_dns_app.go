@@ -100,7 +100,7 @@ func read(id int, c *itm.Client, d *schema.ResourceData) error {
 		d.Set("cname", app.AppCname)
 		d.Set("version", app.Version)
 	} else {
-		log.Printf("The app is disabled. This likely means that it was deleted outside of Terraform.")
+		log.Printf("The app is disabled. This likely means that it was deleted outside of Terraform. 'terraform apply' will recreate the app if you approve. If you don't wish Terraform to continue prompting about it, then you may want to remove its configuration.")
 		d.SetId("")
 	}
 	return nil

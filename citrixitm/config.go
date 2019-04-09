@@ -11,7 +11,7 @@ import (
 
 const (
 	libraryName     = "terraform-provider-citrixitm"
-	libraryVersion  = "0.1.0"
+	libraryVersion  = "1.0.1"
 	libraryURL      = "https://github.com/cedexis/" + libraryName
 	userAgentString = libraryName + "/" + libraryVersion + " (" + libraryURL + ")"
 )

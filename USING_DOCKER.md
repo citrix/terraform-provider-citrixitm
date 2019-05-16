@@ -10,6 +10,7 @@ Docker can be used to run and test the Citrix ITM provider within a containerize
 * [Ad hoc testing](#ad-hoc-testing)
 * [Viewing Logs](#viewing-logs)
 * [Starting Over](#starting-over)
+* [Using Local go-itm](#using-local-go-itm)
 
 ## Build a Docker Image
 
@@ -477,4 +478,13 @@ To start over with a black slate, delete any existing container named "citrixitm
 $ docker rm citrixitm_tf_dev_container
 citrixitm_tf_dev_container
 ```
-Then create a new container, as described in Create a Container. 
+
+Then create a new container, as described in [Create a Container](#create-a-container).
+
+## Using Local go-itm
+
+The Terraform provider is normally pinned to a specific version of go-itm. To override this for local development, Go needs to know that the go-itm module should be taken from a local directory rather than pulled from a remote repository. This is handled using the "replace" functionality of Go modules.
+
+For this to work in the Docker environment, the go-itm code needs to be available to the container. We do this by starting the Docker container...
+
+**Work in progress**

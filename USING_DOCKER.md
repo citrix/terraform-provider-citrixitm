@@ -2,16 +2,15 @@
 
 Docker can be used to run and test the Citrix ITM provider within a containerized environment. The Dockerfile included in the project creates an image provisioned with everything needed for most development and testing purposes. GNUmakefile contains targets allowing you start and manage a long-running container, within which you can execute Terraform commands and run the test suite. All of these tasks are explained below. 
 
-* [Build a Docker Image](#build-image)
-* [Create a Container](#create-container)
-* [Restart a Stopped Container](#restart-stopped-container)
-* [Attach to a Running Container](#attach-to-running-container)
+* [Build a Docker Image](#build-a-docker-image)
+* [Create a Container](#create-a-container)
+* [Restart a Stopped Container](#restart-a-stopped-container)
+* [Attach to a Running Container](#attach-to-a-running-container)
 * [Run Tests](#run-tests)
 * [Ad hoc testing](#ad-hoc-testing)
 * [Viewing Logs](#viewing-logs)
 * [Starting Over](#starting-over)
 
-<a href="#build-image"></a>
 ## Build a Docker Image
 
 A Docker image is like a template that is used to run containers. The specification for the image is found in the project's Dockerfile.
@@ -32,7 +31,6 @@ citrixitm-terraform   latest              4a93e5c833fd        5 seconds ago     
 
 This step generally needs to be repeated occasionally, such as when you delete the Docker image from your system for any reason, or when the Dockerfile is modified. The latter might occur when we update the version of Terraform included, for example.
 
-<a href="#create-container"></a>
 ## Create a Container
 
 The purpose of a Docker image is to give Docker a known state from which to create containers. Within a running container, we'll be able to run Terraform and test the provider. The make docker-run target creates a running container with a Bash shell that you can use for a variety of purpose. There are some arguments to know about:
@@ -77,7 +75,6 @@ ITM_CLIENT_SECRET=<your client secret>
 ITM_BASE_URL=https://portalha.dev.cedexis.com/api
 ```
 
-<a href="#restart-stopped-container"></a>
 ## Restart a Stopped Container
 
 The container runs as long as the original Bash session that started, so it's important to understand which Make targets do this:
@@ -160,7 +157,6 @@ This has same effect in that it drops you into an interactive Bash session withi
 Foo
 ```
 
-<a href="#attach-to-running-container"></a>
 ## Attach to a Running Container
 
 The container is running as long as the original command executed within it. In our case, this is /bin/bash from either the make docker-run or make docker-start Make targets. For example:
@@ -186,7 +182,6 @@ PID   USER     TIME  COMMAND
 
 It's important to keep in mind that Docker still shuts down the container when the original command used to start it terminates, so if you exit the first Bash shell for any reason, it'll boot you out of any attached shells as well. It's a good practice to only use the original shell to execute Terraform commands or run unit tests, and use auxiliary attached shells to inspect artifacts as they are create, e.g. watching the Terraform log file, etc.
 
-<a href="#run-tests"></a>
 ## Run Tests
 
 From within /terraform-provider-citrixitm, you can run the unit and acceptance test suites:
@@ -202,7 +197,6 @@ Acceptance tests involve making real API requests using the ITM_* variables defi
 
 Since the /terraform-provider-citrix is bind mounted to the project repo on the Docker host machine, you can make changes to the code on the host machine "locally" and immediately see those changes reflected by running tests within the container. 
 
-<a href="#ad-hoc-testing"></a>
 ## Ad hoc testing
 
 You may also wish to use the container to exercise the Citrix ITM provider using Terraform, as an end-user would. The Dockerfile specifies instructions to download a recent copy of the Terraform executable when creating the Docker image, so any container created from it already has Terraform installed and ready to use.
@@ -461,7 +455,6 @@ citrixitm_dns_app.docker_test_app: Destruction complete after 0s
 Destroy complete! Resources: 1 destroyed.
 ```
 
-<a href="#viewing-logs"></a>
 ## Viewing Logs
 
 Within the container, the TF_LOG and TF_LOG_PATH environment variables are set at the image level:
@@ -474,7 +467,6 @@ TF_LOG=TRACE
 
 These variables influence how much information Terraform logs and where. You can see that it's set to write to a file at /var/log/terraform.log. Inspect this file to see information recorded when you run tests or when you execute Terraform commands directly.
 
-<a href="#starting-over"></a>
 ## Starting Over
 
 The method described above calls for a long-running container that persists after its Bash session terminates. This is to support restarting the container without losing various artifacts, such as downloaded Go module dependencies and Terraform log files. But sometimes you'd like to start over with a fresh container. In practice, this is mainly when you've done something to change the underlying Docker image, such as when the project's Dockerfile changes for any reason, or when you're moving between Git branches.

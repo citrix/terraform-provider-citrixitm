@@ -503,4 +503,4 @@ To tell Go to use the local version of go-itm, update the Terraform provider's g
 
     replace github.com/cedexis/go-itm => /go-itm
 
-**Work in progress**
+Now any changes you make to either the Terraform provider or the go-itm library code on the Docker host will be reflected when you perform development and testing activities within the container, as described earlier in this document.

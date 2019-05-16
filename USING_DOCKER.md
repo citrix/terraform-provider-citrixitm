@@ -483,8 +483,24 @@ Then create a new container, as described in [Create a Container](#create-a-cont
 
 ## Using Local go-itm
 
-The Terraform provider is normally pinned to a specific version of go-itm. To override this for local development, Go needs to know that the go-itm module should be taken from a local directory rather than pulled from a remote repository. This is handled using the "replace" functionality of Go modules.
+Terraform providers are typically written as wrappers around a separate library that handles the low level API calls. The library used by the Citrix ITM provider is called go-itm. The public repo for it is found at https://github.com/cedexis/go-itm.
 
-For this to work in the Docker environment, the go-itm code needs to be available to the container. We do this by starting the Docker container...
+Some examples of when you might need to work directly with the go-itm code:
+
+* You want to output additional information to the Terraform log files.
+* You need to troubleshoot a possible bug in go-itm itself.
+* You need to extend functionality of go-itm to support new features in the Terraform provider.
+
+The Terraform provider is normally pinned to a specific version of go-itm. To override this for local development, we use the "replace" functionality of Go modules.
+
+For the Docker environment, the go-itm code is made available within the container by starting it with a bind mount to the go-itm source directory on the host:
+
+```bash
+$ docker run -it --name citrixitm_tf_dev_container --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,readonly=1,src=$PWD,dst=/terraform-provider-citrixitm --mount type=bind,src=$ITM_HOST_MODULE_DIR,dst=/terraform-module --mount type=bind,readonly=1,src=$PWD/../go-itm,dst=/go-itm citrixitm-terraform /bin/bash
+```
+
+To tell Go to use the local version of go-itm, update the Terraform provider's go.mod file *on the Docker host* by adding a "replace" directive at the bottom:
+
+    replace github.com/cedexis/go-itm => /go-itm
 
 **Work in progress**

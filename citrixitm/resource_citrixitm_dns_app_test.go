@@ -1,8 +1,12 @@
 package citrixitm
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,6 +15,7 @@ import (
 	"github.com/cedexis/go-itm/itm"
 	"github.com/hashicorp/terraform/helper/acctest"
 	"github.com/hashicorp/terraform/helper/resource"
+	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 )
 
@@ -271,4 +276,58 @@ func testAccCheckCitrixITMDnsAppDestroy(s *terraform.State) error {
 	}
 
 	return nil
+}
+
+func TestDisabledAppProducesErrorOnRead(t *testing.T) {
+	appID := 123
+	mux := http.NewServeMux()
+	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// The resource is found but enabled is false
+		app := itm.DNSApp{
+			Id:            appID,
+			Name:          "Foo",
+			Description:   "Foo description",
+			Enabled:       false,
+			FallbackCname: "Foo fallback CNAME",
+			FallbackTtl:   20,
+			AppData:       "Foo app data",
+			AppCname:      "Foo App CNAME",
+			Version:       234,
+		}
+		js, err := json.Marshal(app)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}))
+	server := httptest.NewServer(mux)
+	defer server.Close()
+	client := server.Client()
+	baseURL, _ := url.Parse(server.URL)
+	itmClient, clientError := itm.NewClient(
+		itm.HTTPClient(client),
+		itm.BaseURL(baseURL),
+	)
+	if clientError != nil {
+		t.Errorf("Got error: %#v", clientError)
+	}
+	resource := resourceCitrixITMDnsApp()
+	data := schema.ResourceData{}
+	data.SetId(strconv.Itoa(appID))
+
+	// Code under test
+	readErr := resource.Read(&data, itmClient)
+	if readErr != nil {
+		t.Errorf("Got error reading resource: %#v:", readErr)
+		return
+	}
+
+	// If the app has been deleted in the Portal, it is set to "disabled" in the
+	// database. The way to tell Terraform that this has happened is to set the
+	// ID to an empty string within the Read method.
+	if "" != data.Id() {
+		t.Errorf("Expected empty Id")
+	}
 }

@@ -91,13 +91,18 @@ func read(id int, c *itm.Client, d *schema.ResourceData) error {
 	if err != nil {
 		return fmt.Errorf("Error retrieving app: %s", err)
 	}
-	d.Set("name", app.Name)
-	d.Set("description", app.Description)
-	d.Set("fallback_cname", app.FallbackCname)
-	d.Set("fallback_ttl", app.FallbackTtl)
-	d.Set("app_data", app.AppData)
-	d.Set("cname", app.AppCname)
-	d.Set("version", app.Version)
+	if app.Enabled {
+		d.Set("name", app.Name)
+		d.Set("description", app.Description)
+		d.Set("fallback_cname", app.FallbackCname)
+		d.Set("fallback_ttl", app.FallbackTtl)
+		d.Set("app_data", app.AppData)
+		d.Set("cname", app.AppCname)
+		d.Set("version", app.Version)
+	} else {
+		log.Printf("The app is disabled. This likely means that it was deleted outside of Terraform. 'terraform apply' will recreate the app if you approve. If you don't wish Terraform to continue prompting about it, then you may want to remove its configuration.")
+		d.SetId("")
+	}
 	return nil
 }
 

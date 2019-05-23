@@ -27,7 +27,9 @@ function onRequest(request, response) {
 }
 `
 
-const updatedMinimalAppSource = minimalAppSource + "\n// foo"
+const updatedMinimalAppSource = minimalAppSource + `
+// foo
+`
 
 var (
 	appName                        string
@@ -174,8 +176,7 @@ func testAccCheckCitrixITMDnsAppAttributes(got *itm.DNSApp, want *testAccCitrixI
 			return
 		}
 		// App data is stripped of leading and trailing whitespace before being submitted to the API
-		trimmed := strings.TrimSpace(want.AppData)
-		if err = testValues("app data", trimmed, got.AppData); err != nil {
+		if err = testValues("app data", strings.TrimSpace(want.AppData), got.AppData); err != nil {
 			return
 		}
 		// Check the app CNAME

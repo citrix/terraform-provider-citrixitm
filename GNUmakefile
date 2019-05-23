@@ -96,10 +96,10 @@ endif
 # Use docker-start to restart an existing exited container by that name.
 docker-run: docker-show-env check-itm-env
 ifndef ITM_HOST_MODULE_DIR
-	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,readonly=1,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) $(DOCKER_IMAGE_NAME) /bin/bash
+	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) $(DOCKER_IMAGE_NAME) /bin/bash
 else
 	@echo "Attaching host directory $(ITM_HOST_MODULE_DIR) as a bind mount to /terraform-module inside the container."
-	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,readonly=1,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) --mount type=bind,src=$(ITM_HOST_MODULE_DIR),dst=/terraform-module $(DOCKER_IMAGE_NAME) /bin/bash
+	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) --mount type=bind,src=$(ITM_HOST_MODULE_DIR),dst=/terraform-module $(DOCKER_IMAGE_NAME) /bin/bash
 endif
 
 .PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile website website-test

@@ -27,3 +27,6 @@ crash.log
 # version control.
 #
 # example.tfvars
+
+# Miscellaneous
+.DS_Store

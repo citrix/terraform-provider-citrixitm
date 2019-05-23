@@ -1,8 +1,12 @@
 package citrixitm
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,12 +15,27 @@ import (
 	"github.com/cedexis/go-itm/itm"
 	"github.com/hashicorp/terraform/helper/acctest"
 	"github.com/hashicorp/terraform/helper/resource"
+	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 )
 
+const minimalAppSource = `function init(config) {}
+
+function onRequest(request, response) {
+    response.addCName('foo.example.com');
+    response.setTTL(20);
+}
+`
+
+const updatedMinimalAppSource = minimalAppSource + `
+// foo
+`
+
 var (
-	appName        string
-	appNameUpdated string
+	appName                        string
+	appNameUpdated                 string
+	escapedMinimalAppSource        = strings.Replace(minimalAppSource, "\n", "\\n", -1)
+	escapedUpdatedMinimalAppSource = strings.Replace(updatedMinimalAppSource, "\n", "\\n", -1)
 )
 
 func init() {
@@ -73,7 +92,7 @@ func TestAccDnsApp_basic(t *testing.T) {
 						&testAccCitrixITMDnsAppExpectedAttributes{
 							Name:          appName,
 							Description:   "some description",
-							AppData:       "// some source",
+							AppData:       minimalAppSource,
 							FallbackCname: "fallback.foo.com",
 						}),
 				),
@@ -87,7 +106,7 @@ func TestAccDnsApp_basic(t *testing.T) {
 						&testAccCitrixITMDnsAppExpectedAttributes{
 							Name:          appNameUpdated,
 							Description:   "some description",
-							AppData:       "// some source",
+							AppData:       minimalAppSource,
 							FallbackCname: "fallback.foo.com",
 						}),
 				),
@@ -101,7 +120,7 @@ func TestAccDnsApp_basic(t *testing.T) {
 						&testAccCitrixITMDnsAppExpectedAttributes{
 							Name:          appNameUpdated,
 							Description:   "some description",
-							AppData:       "// some source foo",
+							AppData:       updatedMinimalAppSource,
 							FallbackCname: "fallback.foo.com",
 						}),
 				),
@@ -115,7 +134,7 @@ func TestAccDnsApp_basic(t *testing.T) {
 						&testAccCitrixITMDnsAppExpectedAttributes{
 							Name:          appNameUpdated,
 							Description:   "some description foo",
-							AppData:       "// some source foo",
+							AppData:       updatedMinimalAppSource,
 							FallbackCname: "fallback.foo.com",
 						}),
 				),
@@ -129,7 +148,7 @@ func TestAccDnsApp_basic(t *testing.T) {
 						&testAccCitrixITMDnsAppExpectedAttributes{
 							Name:          appNameUpdated,
 							Description:   "some description foo",
-							AppData:       "// some source foo",
+							AppData:       updatedMinimalAppSource,
 							FallbackCname: "fallback.bar.com",
 						}),
 				),
@@ -156,7 +175,8 @@ func testAccCheckCitrixITMDnsAppAttributes(got *itm.DNSApp, want *testAccCitrixI
 		if err = testValues("fallback CNAME", want.FallbackCname, got.FallbackCname); err != nil {
 			return
 		}
-		if err = testValues("app data", want.AppData, got.AppData); err != nil {
+		// App data is stripped of leading and trailing whitespace before being submitted to the API
+		if err = testValues("app data", strings.TrimSpace(want.AppData), got.AppData); err != nil {
 			return
 		}
 		// Check the app CNAME
@@ -203,9 +223,9 @@ func testAccCheckCitrixITMDnsAppConfig(randString string) string {
 resource "citrixitm_dns_app" "foo" {
   name 				= "foo-%s"
   description		= "some description"
-  app_data			= "// some source"
+  app_data			= "%s"
   fallback_cname	= "fallback.foo.com"
-}`, randString)
+}`, randString, escapedMinimalAppSource)
 }
 
 func testAccCheckCitrixITMDnsAppConfig_Rename(randString string) string {
@@ -213,9 +233,9 @@ func testAccCheckCitrixITMDnsAppConfig_Rename(randString string) string {
 resource "citrixitm_dns_app" "foo" {
   name 				= "bar-%s"
   description		= "some description"
-  app_data			= "// some source"
+  app_data			= "%s"
   fallback_cname	= "fallback.foo.com"
-}`, randString)
+}`, randString, escapedMinimalAppSource)
 }
 
 func testAccCheckCitrixITMDnsAppConfig_ChangeAppData(randString string) string {
@@ -223,9 +243,9 @@ func testAccCheckCitrixITMDnsAppConfig_ChangeAppData(randString string) string {
 resource "citrixitm_dns_app" "foo" {
   name 				= "bar-%s"
   description		= "some description"
-  app_data			= "// some source foo"
+  app_data			= "%s"
   fallback_cname	= "fallback.foo.com"
-}`, randString)
+}`, randString, escapedUpdatedMinimalAppSource)
 }
 
 func testAccCheckCitrixITMDnsAppConfig_ChangeDescription(randString string) string {
@@ -233,9 +253,9 @@ func testAccCheckCitrixITMDnsAppConfig_ChangeDescription(randString string) stri
 resource "citrixitm_dns_app" "foo" {
   name 				= "bar-%s"
   description		= "some description foo"
-  app_data			= "// some source foo"
+  app_data			= "%s"
   fallback_cname	= "fallback.foo.com"
-}`, randString)
+}`, randString, escapedUpdatedMinimalAppSource)
 }
 
 func testAccCheckCitrixITMDnsAppConfig_ChangeFallbackCNAME(randString string) string {
@@ -243,9 +263,9 @@ func testAccCheckCitrixITMDnsAppConfig_ChangeFallbackCNAME(randString string) st
 resource "citrixitm_dns_app" "foo" {
   name 				= "bar-%s"
   description		= "some description foo"
-  app_data			= "// some source foo"
+  app_data			= "%s"
   fallback_cname	= "fallback.bar.com"
-}`, randString)
+}`, randString, escapedUpdatedMinimalAppSource)
 }
 
 // Test that the app is truly gone
@@ -271,4 +291,58 @@ func testAccCheckCitrixITMDnsAppDestroy(s *terraform.State) error {
 	}
 
 	return nil
+}
+
+func TestDisabledAppProducesErrorOnRead(t *testing.T) {
+	appID := 123
+	mux := http.NewServeMux()
+	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// The resource is found but enabled is false
+		app := itm.DNSApp{
+			Id:            appID,
+			Name:          "Foo",
+			Description:   "Foo description",
+			Enabled:       false,
+			FallbackCname: "Foo fallback CNAME",
+			FallbackTtl:   20,
+			AppData:       "Foo app data",
+			AppCname:      "Foo App CNAME",
+			Version:       234,
+		}
+		js, err := json.Marshal(app)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}))
+	server := httptest.NewServer(mux)
+	defer server.Close()
+	client := server.Client()
+	baseURL, _ := url.Parse(server.URL)
+	itmClient, clientError := itm.NewClient(
+		itm.HTTPClient(client),
+		itm.BaseURL(baseURL),
+	)
+	if clientError != nil {
+		t.Errorf("Got error: %#v", clientError)
+	}
+	resource := resourceCitrixITMDnsApp()
+	data := schema.ResourceData{}
+	data.SetId(strconv.Itoa(appID))
+
+	// Code under test
+	readErr := resource.Read(&data, itmClient)
+	if readErr != nil {
+		t.Errorf("Got error reading resource: %#v:", readErr)
+		return
+	}
+
+	// If the app has been deleted in the Portal, it is set to "disabled" in the
+	// database. The way to tell Terraform that this has happened is to set the
+	// ID to an empty string within the Read method.
+	if "" != data.Id() {
+		t.Errorf("Expected empty Id")
+	}
 }

@@ -16,8 +16,8 @@ install:
 - make install-tools
 
 script:
+- make lint
 - make test
-- make vet
 - make website-test
 
 # branches:

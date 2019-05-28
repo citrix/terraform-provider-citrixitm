@@ -21,14 +21,9 @@ install-tools:
 	GO111MODULE=on go install github.com/client9/misspell/cmd/misspell
 	GO111MODULE=on go install github.com/golangci/golangci-lint/cmd/golangci-lint
 
-vet:
-	@echo "go vet ."
-	@go vet $$(go list ./... | grep -v vendor/) ; if [ $$? -eq 1 ]; then \
-		echo ""; \
-		echo "Vet found suspicious constructs. Please check the reported constructs"; \
-		echo "and fix them if necessary before submitting the code for review."; \
-		exit 1; \
-	fi
+lint:
+	@echo "==> Checking source code against linters..."
+	@golangci-lint run ./$(PKG_NAME)
 
 fmt:
 	gofmt -w $(GOFMT_FILES)
@@ -100,4 +95,4 @@ else
 	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) --mount type=bind,src=$(ITM_HOST_MODULE_DIR),dst=/terraform-module $(DOCKER_IMAGE_NAME) /bin/bash
 endif
 
-.PHONY: build test testacc vet fmt fmtcheck test-compile website website-test
+.PHONY: build install-tools lint test testacc fmt fmtcheck test-compile website website-test

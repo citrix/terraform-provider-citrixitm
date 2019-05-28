@@ -32,9 +32,6 @@ fmt:
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
-errcheck:
-	@sh -c "'$(CURDIR)/scripts/errcheck.sh'"
-
 test-compile:
 	@if [ "$(TEST)" = "./..." ]; then \
 		echo "ERROR: Set TEST to a specific package. For example,"; \
@@ -99,4 +96,4 @@ else
 	@docker run -it --name $(DOCKER_CONTAINER_NAME) --env ITM_BASE_URL --env ITM_CLIENT_ID --env ITM_CLIENT_SECRET --mount type=bind,src=$(PWD),dst=$(DOCKER_SOURCE_DIR) --mount type=bind,src=$(ITM_HOST_MODULE_DIR),dst=/terraform-module $(DOCKER_IMAGE_NAME) /bin/bash
 endif
 
-.PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile website website-test
+.PHONY: build test testacc vet fmt fmtcheck vendor-status test-compile website website-test

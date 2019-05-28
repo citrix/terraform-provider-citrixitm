@@ -28,8 +28,11 @@ lint:
 fmt:
 	gofmt -w $(GOFMT_FILES)
 
+# Currently required by tf-deploy compile
 fmtcheck:
+	@echo "==> Checking source code against gofmt..."
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
+
 
 test-compile:
 	@if [ "$(TEST)" = "./..." ]; then \

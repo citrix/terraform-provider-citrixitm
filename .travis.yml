@@ -18,6 +18,7 @@ install:
 script:
 - make lint
 - make test
+- make website-lint
 - make website-test
 
 # branches:

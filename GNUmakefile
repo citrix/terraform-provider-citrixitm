@@ -1,5 +1,4 @@
 TEST?=$$(go list ./... |grep -v 'vendor')
-GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 WEBSITE_REPO=github.com/hashicorp/terraform-website
 PKG_NAME=citrixitm
 DOCKER_SOURCE_DIR=/terraform-provider-$(PKG_NAME)
@@ -26,7 +25,8 @@ lint:
 	@golangci-lint run ./$(PKG_NAME)
 
 fmt:
-	gofmt -w $(GOFMT_FILES)
+	@echo "==> Fixing source code with gofmt..."
+	gofmt -s -w ./$(PKG_NAME)
 
 # Currently required by tf-deploy compile
 fmtcheck:

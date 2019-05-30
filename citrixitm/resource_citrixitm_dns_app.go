@@ -10,12 +10,14 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
+const resourceName = "Citrix ITM DNS app"
+
 func resourceCitrixITMDnsApp() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceCitrixITMDnsAppCreate,
-		Read:   withExistingResource(read),
-		Update: withExistingResource(update),
-		Delete: withExistingResource(delete),
+		Read:   resourceCitrixITMDnsAppRead,
+		Update: resourceCitrixITMDnsAppUpdate,
+		Delete: resourceCitrixITMDnsAppDelete,
 
 		Schema: map[string]*schema.Schema{
 			"app_data": {
@@ -56,57 +58,60 @@ func resourceCitrixITMDnsApp() *schema.Resource {
 	}
 }
 
-func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*itm.Client)
+func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, m interface{}) error {
+	client := m.(*itm.Client)
 	opts := itm.NewDNSAppOpts(
 		d.Get("name").(string),
 		d.Get("description").(string),
 		d.Get("fallback_cname").(string),
 		d.Get("app_data").(string),
 	)
-	log.Printf("[DEBUG] DNS app create options: %#v", opts)
+	log.Printf("[DEBUG] %s create options: %#v", resourceName, opts)
 	app, err := client.DNSApps.Create(&opts, true)
 	if err != nil {
 		return nil
 	}
-	d.SetId(fmt.Sprintf("%d", app.Id))
-	return read(app.Id, client, d)
+	d.SetId(strconv.Itoa(app.Id))
+	log.Printf("[INFO] %s id: %s", resourceName, d.Id())
+	return resourceCitrixITMDnsAppRead(d, m)
 }
 
-type ProcessAppFunc func(id int, c *itm.Client, d *schema.ResourceData) error
-
-func withExistingResource(f ProcessAppFunc) func(*schema.ResourceData, interface{}) error {
-	return func(d *schema.ResourceData, m interface{}) error {
-		id, err := strconv.Atoi(d.Id())
-		if err != nil {
-			return fmt.Errorf("Invalid app id: %s", d.Id())
-		}
-		return f(id, m.(*itm.Client), d)
-	}
-}
-
-func read(id int, c *itm.Client, d *schema.ResourceData) error {
-	app, err := c.DNSApps.Get(id)
-	log.Printf("[DEBUG] Inside read; app: %#v", app)
+func resourceCitrixITMDnsAppRead(d *schema.ResourceData, m interface{}) error {
+	id, err := strconv.Atoi(d.Id())
 	if err != nil {
-		return fmt.Errorf("Error retrieving app: %s", err)
+		return fmt.Errorf("Error converting app id (%s) to an integer: %s", d.Id(), err)
 	}
-	if app.Enabled {
-		d.Set("name", app.Name)
-		d.Set("description", app.Description)
-		d.Set("fallback_cname", app.FallbackCname)
-		d.Set("fallback_ttl", app.FallbackTtl)
-		d.Set("app_data", app.AppData)
-		d.Set("cname", app.AppCname)
-		d.Set("version", app.Version)
-	} else {
-		log.Printf("The app is disabled. This likely means that it was deleted outside of Terraform. 'terraform apply' will recreate the app if you approve. If you don't wish Terraform to continue prompting about it, then you may want to remove its configuration.")
+	client := m.(*itm.Client)
+	app, err := client.DNSApps.Get(id)
+	if err != nil {
+		// There was a problem retrieving the app
+		// Set the resource ID to "" to indicate that the resource is not present.
+		log.Printf("[WARN] %s id (%s) not found", resourceName, d.Id())
 		d.SetId("")
+	} else {
+		if app.Enabled {
+			d.Set("name", app.Name)
+			d.Set("description", app.Description)
+			d.Set("fallback_cname", app.FallbackCname)
+			d.Set("fallback_ttl", app.FallbackTtl)
+			d.Set("app_data", app.AppData)
+			d.Set("cname", app.AppCname)
+			d.Set("version", app.Version)
+		} else {
+			// When the app is disabled, we wish Terraform to recreate it with a new id
+			log.Printf("[INFO] The %s (id %s) is disabled. This likely means that it was deleted outside of Terraform. 'terraform apply' will recreate the app if you approve. If you don't wish Terraform to continue prompting about it, then you may want to remove its configuration.", resourceName, d.Id())
+			d.SetId("")
+		}
 	}
 	return nil
 }
 
-func update(id int, c *itm.Client, d *schema.ResourceData) error {
+func resourceCitrixITMDnsAppUpdate(d *schema.ResourceData, m interface{}) error {
+	id, err := strconv.Atoi(d.Id())
+	if err != nil {
+		return fmt.Errorf("Error converting app id (%s) to an integer: %s", d.Id(), err)
+	}
+	client := m.(*itm.Client)
 	if d.HasChange("name") ||
 		d.HasChange("description") ||
 		d.HasChange("fallback_cname") ||
@@ -118,19 +123,21 @@ func update(id int, c *itm.Client, d *schema.ResourceData) error {
 			d.Get("fallback_cname").(string),
 			d.Get("app_data").(string),
 		)
-		log.Printf("[DEBUG] DNS app update options: %#v", opts)
-		_, err := c.DNSApps.Update(id, &opts, true)
+		log.Printf("[DEBUG] %s update options: %#v", resourceName, opts)
+		_, err := client.DNSApps.Update(id, &opts, true)
 		if err != nil {
-			return nil
+			log.Printf("[WARN] There was an error updating %s (id %d): %s", resourceName, id, err)
 		}
 	}
-	return read(id, c, d)
+	return resourceCitrixITMDnsAppRead(d, m)
 }
 
-func delete(id int, c *itm.Client, d *schema.ResourceData) error {
-	err := c.DNSApps.Delete(id)
+func resourceCitrixITMDnsAppDelete(d *schema.ResourceData, m interface{}) error {
+	id, _ := strconv.Atoi(d.Id())
+	client := m.(*itm.Client)
+	err := client.DNSApps.Delete(id)
 	if err != nil {
-		return fmt.Errorf("There was a problem deleting app (id %d): %v", id, err)
+		log.Printf("[DEBUG] There was an error deleting %s (id %d): %#v", resourceName, id, err)
 	}
 	return nil
 }

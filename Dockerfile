@@ -1,4 +1,4 @@
-FROM golang:1.11.6-alpine3.9
+FROM golang:1.12.5-alpine3.9
 
 RUN apk add --update \
     bash \
@@ -7,6 +7,10 @@ RUN apk add --update \
     git \
     shadow \
     vim
+
+# Additional go tools
+RUN go get -u github.com/client9/misspell/cmd/misspell
+RUN go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
 # Some environment variables to influence Terraform behavior
 ENV TF_LOG=TRACE TF_LOG_PATH=/var/log/terraform.log

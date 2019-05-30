@@ -54,5 +54,18 @@ The following attributes are exported:
 
 ## Import
 
-Terraform `import` functionality is not currently supported.
+An existing Citrix ITM DNS app instance may be imported using its app ID, which is found in the Citrix ITM Portal. For example, say you have an existing app with ID 123, and a Terraform configuration like the following:
 
+```hcl
+resource "citrixitm_dns_app" "my_app" {
+    // settings...
+}
+```
+
+The following command can be used to create an association between the existing app and the Terraform configuration.
+
+```bash
+$ terraform import citrixitm_dns_app.my_app 123
+```
+
+At this point the configuration may or may not match the production state, so you should also run `terraform plan` to see if any changes need to be made to the resource configuration in order to reconcile the differences.

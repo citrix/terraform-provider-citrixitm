@@ -87,7 +87,7 @@ commands will detect it and remind you to do so if necessary.
 To link the existing production app and the Terraform resource configuration, run:
 
 ```bash
-terraform import -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET citrixitm_dns_app.dns_simple <app_id>
+terraform import -var itm_client_id=$CITRIXITM_CLIENT_ID -var itm_client_secret=$CITRIXITM_CLIENT_SECRET citrixitm_dns_app.simple_app <app_id>
 ```
 
 Replace `<app_id>` with the application ID you noted earlier.

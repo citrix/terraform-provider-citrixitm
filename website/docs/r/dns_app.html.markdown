@@ -68,4 +68,4 @@ The following command can be used to create an association between the existing 
 $ terraform import citrixitm_dns_app.my_app 123
 ```
 
-At this point the configuration may or may not match the production state, so you should also run `terraform plan` to see if any changes need to be made to the resource configuration in order to reconcile the differences.
+At this point the resource configuration may or may not match production state, so you should also run `terraform plan` to see if any changes need to be made in order to reconcile the differences.

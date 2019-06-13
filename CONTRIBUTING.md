@@ -135,7 +135,7 @@ For the **DELETE** operation, output the following:
 * Before actually deleting the resource:
 
 ```
-[INFO] Deleting <resource name>
+[INFO] Deleting <resource name> with ID <resource ID>
 ```
 
 * After deleting the resource:

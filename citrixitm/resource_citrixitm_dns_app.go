@@ -59,6 +59,7 @@ func resourceCitrixITMDnsApp() *schema.Resource {
 }
 
 func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, m interface{}) error {
+	log.Printf("[INFO] Creating %s", resourceName)
 	client := m.(*itm.Client)
 	opts := itm.NewDNSAppOpts(
 		d.Get("name").(string),
@@ -66,17 +67,18 @@ func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, m interface{}) error 
 		d.Get("fallback_cname").(string),
 		d.Get("app_data").(string),
 	)
-	log.Printf("[DEBUG] %s create options: %#v", resourceName, opts)
+	log.Printf("[DEBUG] %s creation options:\n%#v", resourceName, opts)
 	app, err := client.DNSApps.Create(&opts, true)
 	if err != nil {
 		return nil
 	}
 	d.SetId(strconv.Itoa(app.Id))
-	log.Printf("[INFO] %s id: %s", resourceName, d.Id())
+	log.Printf("[INFO] Created %s with ID %s", resourceName, d.Id())
 	return resourceCitrixITMDnsAppRead(d, m)
 }
 
 func resourceCitrixITMDnsAppRead(d *schema.ResourceData, m interface{}) error {
+	log.Printf("[INFO] Reading %s", resourceName)
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return fmt.Errorf("Error converting app id (%s) to an integer: %s", d.Id(), err)
@@ -85,8 +87,9 @@ func resourceCitrixITMDnsAppRead(d *schema.ResourceData, m interface{}) error {
 	app, err := client.DNSApps.Get(id)
 	if err != nil {
 		// There was a problem retrieving the app
-		// Set the resource ID to "" to indicate that the resource is not present.
-		log.Printf("[WARN] %s id (%s) not found", resourceName, d.Id())
+		log.Printf("[WARN] %s with ID %s not found", resourceName, d.Id())
+
+		// Set the resource ID to "" to indicate that the resource is not present
 		d.SetId("")
 	} else {
 		if app.Enabled {
@@ -97,9 +100,11 @@ func resourceCitrixITMDnsAppRead(d *schema.ResourceData, m interface{}) error {
 			d.Set("app_data", app.AppData)
 			d.Set("cname", app.AppCname)
 			d.Set("version", app.Version)
+			log.Printf("[INFO] Read %s with ID %s", resourceName, d.Id())
 		} else {
-			// When the app is disabled, we wish Terraform to recreate it with a new id
-			log.Printf("[INFO] The %s (id %s) is disabled. This likely means that it was deleted outside of Terraform. 'terraform apply' will recreate the app if you approve. If you don't wish Terraform to continue prompting about it, then you may want to remove its configuration.", resourceName, d.Id())
+			// When the app is disabled, Terraform should recreate it with a
+			// new ID, which is done by setting the ID to "".
+			log.Printf("[WARN] The %s with ID %s is disabled. This means it was likely deleted outside of Terraform. 'terraform apply' will recreate the app if you approve. If you wish Terraform to stop prompting about it, then you may want to remove its configuration.", resourceName, d.Id())
 			d.SetId("")
 		}
 	}
@@ -107,6 +112,7 @@ func resourceCitrixITMDnsAppRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceCitrixITMDnsAppUpdate(d *schema.ResourceData, m interface{}) error {
+	log.Printf("[INFO] Updating %s", resourceName)
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return fmt.Errorf("Error converting app id (%s) to an integer: %s", d.Id(), err)
@@ -123,22 +129,25 @@ func resourceCitrixITMDnsAppUpdate(d *schema.ResourceData, m interface{}) error 
 			d.Get("fallback_cname").(string),
 			d.Get("app_data").(string),
 		)
-		log.Printf("[DEBUG] %s update options: %#v", resourceName, opts)
+		log.Printf("[DEBUG] %s update options:\n%#v", resourceName, opts)
 		_, err := client.DNSApps.Update(id, &opts, true)
 		if err != nil {
-			log.Printf("[WARN] There was an error updating %s (id %d): %s", resourceName, id, err)
+			log.Printf("[WARN] There was an error updating %s with ID %s: %s", resourceName, d.Id(), err)
 		}
+		log.Printf("[INFO] Updated %s with ID %s", resourceName, d.Id())
 	}
 	return resourceCitrixITMDnsAppRead(d, m)
 }
 
 func resourceCitrixITMDnsAppDelete(d *schema.ResourceData, m interface{}) error {
+	log.Printf("[INFO] Deleting %s with ID %s", resourceName, d.Id())
 	id, _ := strconv.Atoi(d.Id())
 	client := m.(*itm.Client)
 	err := client.DNSApps.Delete(id)
 	if err != nil {
-		log.Printf("[DEBUG] There was an error deleting %s (id %d): %#v", resourceName, id, err)
+		log.Printf("[WARN] There was an error deleting %s with ID %s: %s", resourceName, d.Id(), err)
 	}
+	log.Printf("[INFO] Deleted %s with ID %s", resourceName, d.Id())
 	return nil
 }
 

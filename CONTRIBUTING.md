@@ -78,13 +78,13 @@ For the **CREATE** operation, output the following:
 
 * Before actually creating the resource:
 
-```bash
+```
 [INFO] Creating <resource name>
 ```
 
 * Before actually creating the resource:
 
-```bash
+```
 [DEBUG] <resource name> creation options:
 ...
 ```

@@ -67,7 +67,7 @@ func resourceCitrixITMDnsAppCreate(d *schema.ResourceData, m interface{}) error 
 		d.Get("fallback_cname").(string),
 		d.Get("app_data").(string),
 	)
-	log.Printf("[DEBUG] %s creation options:\n%#v", resourceName, opts)
+	log.Printf("[DEBUG] %s create options:\n%#v", resourceName, opts)
 	app, err := client.DNSApps.Create(&opts, true)
 	if err != nil {
 		return nil

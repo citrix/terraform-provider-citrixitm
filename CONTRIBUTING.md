@@ -85,7 +85,7 @@ For the **CREATE** operation, output the following:
 * Before actually creating the resource:
 
 ```
-[DEBUG] <resource name> creation options:
+[DEBUG] <resource name> create options:
 ...
 ```
 

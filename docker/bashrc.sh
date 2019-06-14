@@ -5,3 +5,6 @@ PS1="[container] \w $ "
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# Handle duplicated history entries
+HISTCONTROL=ignoreboth:erasedups

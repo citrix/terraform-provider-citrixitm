@@ -504,3 +504,7 @@ To tell Go to use the local version of go-itm, update the Terraform provider's g
     replace github.com/cedexis/go-itm => /go-itm
 
 Now any changes you make to either the Terraform provider or the go-itm library code on the Docker host will be reflected when you perform development and testing activities within the container, as described earlier in this document.
+
+### Coordinating update of go.mod and building the Docker image
+
+One important gotcha is that the Docker image needs to be built *before* you add the `replace` directive to go.mod as described above. In other words, run `make docker-build` first, then update go.mod on the Docker host.

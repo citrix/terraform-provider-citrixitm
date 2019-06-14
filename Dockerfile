@@ -13,7 +13,7 @@ RUN go get -u github.com/client9/misspell/cmd/misspell
 RUN go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
 # Some environment variables to influence Terraform behavior
-ENV TF_LOG=TRACE TF_LOG_PATH=/var/log/terraform.log
+ENV TF_LOG=DEBUG TF_LOG_PATH=/var/log/terraform.log
 
 RUN usermod --shell /bin/bash root
 ADD docker/bashrc.sh /root/.bashrc

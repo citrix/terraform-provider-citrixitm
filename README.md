@@ -1,3 +1,6 @@
+| NOTICE: Due to strategic changes at Citrix, this project is no longer maintained. |
+| --- |
+
 # Terraform Provider
 
 - Website: https://www.terraform.io
